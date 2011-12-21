@@ -1,0 +1,66 @@
+<h1>JsonSchemaComponent demo</h1>
+
+<h2>Textarea</h2>
+<textarea id=demotextarea rows=25 cols=80>
+{
+  "title": "Moby Dick",
+  "abstract": "Something about a white whale and a man..",
+  "public": false,
+  "category" : "politics"
+}
+</textarea>
+
+<hr>
+
+<h2>Form</h2>
+<form id=demoform>
+
+    <p> Blogpost title:
+    <input type=text name=title />
+
+    <p> Blogpost Teaser Text:
+    <textarea name=abstract></textarea>
+
+    <p> Public availability:
+    <input type=checkbox name=public />
+
+    <p> Category:
+    <input type=radio value=local name=category /> Local
+    <input type=radio value=filmcritics name=category /> Filmcritics
+    <input type=radio value=polictics name=category /> Polictics
+
+</form>
+
+<script src=vendor/jquery-1.7.1.js></script>
+<script src=vendor/jquery.tmpl.js></script>
+<script src=src/json_schema_component.js></script>
+<script>
+new JsonSchemaComponent({
+  schema: {
+    "name" : "Blogpost",
+    "properties" : {
+      "title" : {
+        "type" : "string",
+        "description" : "Blogpost title",
+        "required" : true
+      },
+      "abstract" : {
+        "type" : "string",
+        "description" : "Blogpost Teaser Text",
+        "required": false
+      },
+      "public" : {
+        "description" : "Public availability",
+        "type" : "boolean",
+      },
+      "category" : {
+        "description" : "Category",
+        "type" : "string",
+        "enum" : ["local", "polictics", "filmcritics"]
+      }
+    }
+  },
+  textarea: $('#demotextarea'),
+  form: $('#demoform'),
+});
+</script>

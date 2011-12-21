@@ -28,9 +28,9 @@ function JsonSchemaComponent(options) {
     var input = form.find('*[name=' + key + ']')
     var type = input.attr("type");
 
-    if(type == "checkbox") {
+    if(type === "checkbox") {
       check(input, value === true);
-    } else if (type == "radio") {
+    } else if (type === "radio") {
       input.each(function(_, radio_box) {
         check($(radio_box), value.indexOf(radio_box.value) !== -1);
       });

@@ -11,6 +11,34 @@
 </textarea>
 
 <hr>
+<h2>Schema</h2>
+<textarea id=schema rows=25 disabled=disabled style="width: 100%;">
+{
+  "name" : "Blogpost",
+  "properties" : {
+    "title" : {
+      "type" : "string",
+      "description" : "Blogpost title",
+      "required" : true
+    },
+    "abstract" : {
+      "type" : "string",
+      "description" : "Blogpost Teaser Text",
+      "required": false
+    },
+    "public" : {
+      "description" : "Public availability",
+      "type" : "boolean"
+    },
+    "category" : {
+      "description" : "Category",
+      "type" : "string",
+      "enum" : ["local", "politics", "filmcritics"]
+    }
+  }
+}
+</textarea>
+</div>
 
 <h2>Form</h2>
 <form id=demoform>
@@ -36,30 +64,7 @@
 <script src=src/json_schema_component.js></script>
 <script>
 new JsonSchemaComponent({
-  schema: {
-    "name" : "Blogpost",
-    "properties" : {
-      "title" : {
-        "type" : "string",
-        "description" : "Blogpost title",
-        "required" : true
-      },
-      "abstract" : {
-        "type" : "string",
-        "description" : "Blogpost Teaser Text",
-        "required": false
-      },
-      "public" : {
-        "description" : "Public availability",
-        "type" : "boolean",
-      },
-      "category" : {
-        "description" : "Category",
-        "type" : "string",
-        "enum" : ["local", "politics", "filmcritics"]
-      }
-    }
-  },
+  schema: JSON.parse($('#schema').val()),
   textarea: $('#demotextarea'),
   form: $('#demoform'),
 });

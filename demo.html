@@ -1,7 +1,8 @@
 <h1>JsonSchemaComponent demo</h1>
 
-<h2>Textarea</h2>
-<textarea id=demotextarea rows=25 cols=80 disabled=disabled>
+<div style="float: left; width: 49%">
+<h2 style="margin-top: 0px;">Textarea</h2>
+<textarea id=demotextarea rows=25 disabled=disabled style="width: 100%;">
 {
   "title": "Moby Dick",
   "abstract": "Something about a white whale and a man..",
@@ -9,8 +10,9 @@
   "category": "politics"
 }
 </textarea>
+</div>
 
-<hr>
+<div style="margin-left: 51%; width: 49%">
 <h2>Schema</h2>
 <textarea id=schema rows=25 disabled=disabled style="width: 100%;">
 {
@@ -40,6 +42,8 @@
 </textarea>
 </div>
 
+<hr style="clear: both;">
+
 <h2>Form</h2>
 <form id=demoform>
 
@@ -53,9 +57,9 @@
     <input type=checkbox name=public />
 
     <p> Category:
-    <input type=radio value=local name=category /> Local
-    <input type=radio value=filmcritics name=category /> Filmcritics
-    <input type=radio value=politics name=category /> Politics
+    <label><input type=radio value=local name=category /> Local</label>
+    <label><input type=radio value=filmcritics name=category /> Filmcritics</label>
+    <label><input type=radio value=politics name=category /> Politics</label>
 
 </form>
 

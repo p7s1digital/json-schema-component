@@ -5,8 +5,8 @@
 {
   "title": "Moby Dick",
   "abstract": "Something about a white whale and a man..",
-  "public": false,
-  "category" : "politics"
+  "public": true,
+  "category" : ["politics"]
 }
 </textarea>
 
@@ -27,7 +27,7 @@
     <p> Category:
     <input type=radio value=local name=category /> Local
     <input type=radio value=filmcritics name=category /> Filmcritics
-    <input type=radio value=polictics name=category /> Polictics
+    <input type=radio value=politics name=category /> Politics
 
 </form>
 
@@ -56,7 +56,7 @@ new JsonSchemaComponent({
       "category" : {
         "description" : "Category",
         "type" : "string",
-        "enum" : ["local", "polictics", "filmcritics"]
+        "enum" : ["local", "politics", "filmcritics"]
       }
     }
   },

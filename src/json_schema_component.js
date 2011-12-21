@@ -13,7 +13,8 @@ function JsonSchemaComponent(options) {
     throw new Error("JsonSchemaComponent needs a textarea, like this: 'new JsonSchemaComponent({textarea:'#...');'.");
   }
 
-  var json = $.parseJSON($(options.textarea).val());
+  var textarea = $(options.textarea);
+  var json = $.parseJSON($(textarea).val());
   var form = $(options.form);
 
   function check(input, checked) {
@@ -39,6 +40,17 @@ function JsonSchemaComponent(options) {
     }
   });
 
+  form.on('change', function(e) {
+    var target = $(e.target)
+    var type = target.attr("type");
 
+    if(type === "checkbox") {
+      json[e.target.name] = target.attr("checked") === "checked";
+    } else {
+      json[e.target.name] = target.val()
+    }
+
+    textarea.val(JSON.stringify(json, null, 2));
+  });
 }
 

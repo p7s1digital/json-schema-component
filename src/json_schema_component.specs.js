@@ -117,9 +117,9 @@ describe("JsonSchemaComponent", function() {
     it("should should update the textarea's json from a simple checkbox change", function() {
 
       fixture.html(
-        '<textarea id=testtextarea>{      "public": false}</textarea>' +
+        '<textarea id=testtextarea>{      "public": "no"}</textarea>' +
         '<form id=testform>' +
-        '<input type=checkbox id=testcheckbox name=public>' +
+        '<input type=checkbox id=testcheckbox name=public value=yes>' +
         '</form>'
       );
 
@@ -127,7 +127,7 @@ describe("JsonSchemaComponent", function() {
 
       $('#testcheckbox').click();
 
-      expect($("#testtextarea").val()).toContain('"public": true');
+      expect($("#testtextarea").val()).toContain('"public": "yes"');
 
     });
 
@@ -147,6 +147,39 @@ describe("JsonSchemaComponent", function() {
       $('#l').click();
 
       expect($("#testtextarea").val()).toContain('"category": "local"');
+    });
+
+    it("should should update an array field from a check box", function() {
+      fixture.html(
+        '<textarea id=testtextarea>{"characters": ["elijah"]}</textarea>'+
+        '<form id=testform>' +
+          '<input type="checkbox" id=i name=characters value=ishmael />' +
+          '<input type="checkbox" id=e name=characters value=elijah checked=checked />' +
+          '<input type="checkbox" id=a name=characters value=ahab />' +
+        '</form>'
+      );
+
+      new JsonSchemaComponent({
+        textarea:"#testtextarea",
+        form:"#testform",
+        schema: {
+          properties: {
+            characters: {
+              description: "Your favorite characters from Moby Dick",
+              type: "array",
+            }
+          }
+        }
+      });
+
+      $('#a').click();
+      expect(JSON.parse($("#testtextarea").val()).characters).toEqual(["elijah", "ahab"]);
+
+      $('#i').click();
+      expect(JSON.parse($("#testtextarea").val()).characters).toEqual(["elijah", "ahab", "ishmael"]);
+
+      $('#e').click();
+      expect(JSON.parse($("#testtextarea").val()).characters).toEqual(["ahab", "ishmael"]);
     });
   });
 });

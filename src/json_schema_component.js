@@ -42,12 +42,34 @@ function JsonSchemaComponent(options) {
 
   form.on('change', function(e) {
     var target = $(e.target)
-    var type = target.attr("type");
+    var input_type = target.attr("type");
+    var name = e.target.name;
+    var value = target.val();
+    var selected = target.attr("checked") === "checked";
 
-    if(type === "checkbox") {
-      json[e.target.name] = target.attr("checked") === "checked";
+    var property_type = (
+      options.schema != null &&
+      options.schema.properties != null &&
+      options.schema.properties[name] != null &&
+      options.schema.properties[name].type
+    )
+
+    if(property_type === "boolean") {
+      json[name] = selected;
+    } else if (property_type === "array") {
+      json[name] = json[name] || [];
+      var pos = json[name].indexOf(value);
+      var contains = pos !== -1;
+      if (selected && !contains) {
+        json[name].push(value);
+      } else {
+        // "delete json[name][pos]"
+        json[name] = $.grep(json[name], function(_, i) {
+          return i !== pos;
+        })
+      }
     } else {
-      json[e.target.name] = target.val()
+      json[name] = value;
     }
 
     textarea.val(JSON.stringify(json, null, 2));

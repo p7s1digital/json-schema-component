@@ -25,6 +25,15 @@ function JsonSchemaComponent(options) {
     }
   }
 
+  function get_property_type(name) {
+   if (options.schema != null &&
+       options.schema.properties != null &&
+       options.schema.properties[name] != null &&
+       options.schema.properties[name].type != null) {
+      return options.schema.properties[name].type
+    }
+  }
+
   function form_out(name, value) {
     /**
      * Changes values in an existing form's input field with name <name>
@@ -49,12 +58,8 @@ function JsonSchemaComponent(options) {
      * Changes the textarea's content according to an input's change event in
      * accordance with the schema.
      */
-    var property_type = (
-      options.schema != null &&
-      options.schema.properties != null &&
-      options.schema.properties[name] != null &&
-      options.schema.properties[name].type
-    )
+
+    var property_type = get_property_type(name);
 
     if(property_type === "boolean") {
       json[name] = selected;

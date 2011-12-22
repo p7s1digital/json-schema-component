@@ -149,6 +149,34 @@ describe("JsonSchemaComponent", function() {
       expect($("#testtextarea").val()).toContain('"category": "local"');
     });
 
+    it("should should update a boolean field from a check box", function() {
+      fixture.html(
+        '<textarea id=testtextarea>{"eaten_by_whale": true}</textarea>'+
+        '<form id=testform>' +
+          '<input type="checkbox" id=eaten name=eaten_by_whale value=ahab checked=checked/>' +
+        '</form>'
+      );
+
+      new JsonSchemaComponent({
+        textarea:"#testtextarea",
+        form:"#testform",
+        schema: {
+          properties: {
+            eaten_by_whale: {
+              description: "Has this thing been eaten by a whale ?",
+              type: "boolean"
+            }
+          }
+        }
+      });
+
+      $('#eaten').click();
+      expect($("#testtextarea").val()).toContain('"eaten_by_whale": false');
+
+      $('#eaten').click();
+      expect($("#testtextarea").val()).toContain('"eaten_by_whale": true');
+    });
+
     it("should should update an array field from a check box", function() {
       fixture.html(
         '<textarea id=testtextarea>{"characters": ["elijah"]}</textarea>'+

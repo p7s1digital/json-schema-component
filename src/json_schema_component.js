@@ -25,8 +25,12 @@ function JsonSchemaComponent(options) {
     }
   }
 
-  $.each(json, function(key, value) {
-    var input = form.find('*[name=' + key + ']')
+  function form_out(name, value) {
+    /**
+     * Changes values in an existing form's input field with name <name>
+     * according to the values in <value>
+     */
+    var input = form.find('*[name=' + name + ']');
     var type = input.attr("type");
 
     if(type === "checkbox") {
@@ -38,15 +42,13 @@ function JsonSchemaComponent(options) {
     } else {
       input.val(value);
     }
-  });
+  }
 
-  form.on('change', function(e) {
-    var target = $(e.target)
-    var input_type = target.attr("type");
-    var name = e.target.name;
-    var value = target.val();
-    var selected = target.attr("checked") === "checked";
-
+  function form_in(input_type, name, value, selected) {
+    /**
+     * Changes the textarea's content according to an input's change event in
+     * accordance with the schema.
+     */
     var property_type = (
       options.schema != null &&
       options.schema.properties != null &&
@@ -73,6 +75,18 @@ function JsonSchemaComponent(options) {
     }
 
     textarea.val(JSON.stringify(json, null, 2));
+  };
+
+  $.each(json, form_out);
+
+  form.on('change', function(e) {
+    var target = $(e.target)
+    var input_type = target.attr("type");
+    var name = e.target.name;
+    var value = target.val();
+    var selected = target.attr("checked") === "checked";
+
+    form_in(input_type, name, value, selected);
   });
 }
 

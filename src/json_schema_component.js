@@ -17,14 +17,6 @@ function JsonSchemaComponent(options) {
   var json = $.parseJSON($(textarea).val());
   var form = $(options.form);
 
-  function check(input, checked) {
-    if (checked) {
-      input.attr("checked", "checked")
-    } else {
-      input.removeAttr("checked");
-    }
-  }
-
   function get_property_type(name) {
    if (options.schema != null &&
        options.schema.properties != null &&
@@ -41,12 +33,24 @@ function JsonSchemaComponent(options) {
      */
     var input = form.find('*[name=' + name + ']');
     var type = input.attr("type");
+    var property_type = get_property_type(name);
 
-    if(type === "checkbox") {
-      check(input, value === true);
-    } else if (type === "radio") {
-      input.each(function(_, radio_box) {
-        check($(radio_box), value.indexOf(radio_box.value) !== -1);
+    if(type === "checkbox" || type === "radio") {
+      input.each(function(_, input) {
+
+        var checked;
+
+        if (property_type === "array") {
+          checked = value.indexOf(input.value) !== -1;
+        } else {
+          checked = value === true;
+        }
+
+        if (checked) {
+          $(input).attr("checked", "checked")
+        } else {
+          $(input).removeAttr("checked");
+        }
       });
     } else {
       input.val(value);

@@ -59,17 +59,50 @@ describe("JsonSchemaComponent", function() {
       expect($("#testcheckbox_b").is(":checked")).toBeFalsy();
     });
 
-    it("should should fill boolean values in a provided form with two radio boxes", function() {
+    it("should should update multiple radio from an array field", function() {
       fixture.html('<textarea id=testtextarea>{"field": ["b"]}</textarea>'+
                    '<form id=testform>'+
                    '<input type=radio id="testradiobox_a" name=field value="a" />'+
                    '<input type=radio id="testradiobox_b" name=field value="b" />'+
                    '</form>');
 
-      new JsonSchemaComponent({schema:{}, textarea:"#testtextarea", form:"#testform"});
+      new JsonSchemaComponent({
+        schema: {properties:{field:{type:"array"}}},
+        textarea:"#testtextarea",
+        form:"#testform"
+      });
 
       expect($("#testradiobox_a").is(":checked")).toBeFalsy();
       expect($("#testradiobox_b").is(":checked")).toBeTruthy();
+    });
+
+    it("should should update multiple checkboxes from an array field ", function() {
+      fixture.html(
+        '<textarea id=testtextarea>{"characters": ["elijah"]}</textarea>'+
+        '<form id=testform>' +
+          '<input type="checkbox" id=i name=characters value=ishmael />' +
+          '<input type="checkbox" id=e name=characters value=elijah />' +
+          '<input type="checkbox" id=a name=characters value=ahab />' +
+        '</form>'
+      );
+
+      new JsonSchemaComponent({
+        textarea:"#testtextarea",
+        form:"#testform",
+        schema: {
+          properties: {
+            characters: {
+              description: "Your favorite characters from Moby Dick",
+              type: "array",
+            }
+          }
+        }
+      });
+
+      expect($("#e").is(":checked")).toBeTruthy();
+
+      expect($("#i").is(":checked")).toBeFalsy();
+      expect($("#a").is(":checked")).toBeFalsy();
     });
   });
 

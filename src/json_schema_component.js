@@ -67,7 +67,7 @@ function JsonSchemaComponent(options) {
 
     if(property_type === "boolean") {
       json[name] = selected;
-    } else if (property_type === "array") {
+    } else if (property_type === "array" && input_type !== "select") {
       json[name] = json[name] || [];
       var pos = json[name].indexOf(value);
       var contains = pos !== -1;
@@ -89,9 +89,15 @@ function JsonSchemaComponent(options) {
   $.each(json, form_out);
 
   form.on('change', function(e) {
-    var target = $(e.target)
-    var input_type = target.attr("type");
-    var name = e.target.name;
+    var tag_name = e.target.tagName.toLowerCase();
+    var target = $(e.target);
+    var input_type;
+    if (tag_name === "select") {
+      input_type = "select";
+    } else {
+      input_type = target.attr("type") || "text";
+    }
+    var name = target.attr('name');
     var value = target.val();
     var selected = target.attr("checked") === "checked";
 

@@ -7,7 +7,8 @@
   "title": "Moby Dick",
   "abstract": "Something about a white whale and a man..",
   "public": true,
-  "category": "politics"
+  "category": "politics",
+  "harpooneers": ["Queequeg", "Tashtego"]
 }
 </textarea>
 </div>
@@ -36,6 +37,14 @@
       "description" : "Category",
       "type" : "string",
       "enum" : ["local", "politics", "filmcritics"]
+    },
+    "harpooneers" : {
+      "description" : "Which Harpooneers do you like the most ?",
+      "type" : "array",
+      "items": {
+        "type" : "string",
+        "enum" : ["Queequeg", "Tashtego", "Daggoo", "Fedallah"]
+      }
     }
   }
 }
@@ -60,6 +69,14 @@
     <label><input type=radio value=local name=category /> Local</label>
     <label><input type=radio value=filmcritics name=category /> Filmcritics</label>
     <label><input type=radio value=politics name=category /> Politics</label>
+
+    <p> Harpooneers:
+    <select name=harpooneers size=5 multiple>
+      <option>Queequeg</option>
+      <option>Tashtego</option>
+      <option>Daggoo</option>
+      <option>Fedallah</option>
+    </select>
 
 </form>
 

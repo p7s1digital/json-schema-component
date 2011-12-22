@@ -8,6 +8,23 @@ beforeEach(function () {
 
 describe("JsonSchemaComponent", function() {
 
+  function select_option(select_element, option_element, selected) {
+    /*
+    * Helper method to simulate a click on an <option> element inside a <select>.
+    */
+    if (selected) {
+      $(option_element).attr("selected", "selected");
+    } else {
+      $(option_element).removeAttr("selected");
+    }
+
+    $(select_element).trigger(
+      $.Event("change", {
+        target: $(select_element).get(0)
+      })
+    );
+  }
+
   describe('form-in features', function() {
 
     it("should throw an error when invoked w/o arguments", function() {
@@ -241,6 +258,39 @@ describe("JsonSchemaComponent", function() {
 
       $('#e').click();
       expect(JSON.parse($("#testtextarea").val()).characters).toEqual(["ahab", "ishmael"]);
+    });
+
+    it("should should update an array field from a select element", function() {
+      fixture.html(
+        '<textarea id=testtextarea>{"harpooneers": ["Queequeg"]}</textarea>'+
+        '<form id=testform>' +
+        '<select id=selecttest name=harpooneers size=5 multiple>' +
+          '<option value=Queequeg id=q>Queequeg</option>' +
+          '<option value=Tashtego id=t>Tashtego</option>' +
+          '<option value=Daggoo id=d>Daggoo</option>' +
+          '<option value=Fedallah id=f>Fedallah</option>' +
+        '</select>' +
+        '</form>'
+      );
+
+      new JsonSchemaComponent({
+        textarea:"#testtextarea",
+        form:"#testform",
+        schema: {
+          properties: {
+            harpooneers: {
+              description: "Which Harpooneers do you like the most ?",
+              type: "array",
+            }
+          }
+        }
+      });
+
+      select_option("#selecttest", "#t", true);
+      expect(JSON.parse($("#testtextarea").val()).harpooneers).toEqual(["Queequeg", "Tashtego"]);
+
+      select_option("#selecttest", "#q", false);
+      expect(JSON.parse($("#testtextarea").val()).harpooneers).toEqual(["Tashtego"]);
     });
   });
 });

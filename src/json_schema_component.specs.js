@@ -288,5 +288,81 @@ describe("JsonSchemaComponent", function() {
       expect(JSON.parse($("#testtextarea").val()).harpooneers).toEqual(["Tashtego"]);
     });
   });
+
+  describe('form-renderer features', function() {
+    beforeEach(function () {
+      fixture.html(
+        '<textarea id=testtextarea>{}</textarea>'+
+        '<form id=testform></form>'
+      );
+    });
+
+    function _render_form_from_schema(schema) {
+      new JsonSchemaComponent({
+        textarea:"#testtextarea",
+        form:"#testform",
+        schema: schema
+      });
+      return $("#testform").html();
+    }
+
+    it("should should render a simple one-textfield-form", function() {
+      var html = _render_form_from_schema({
+        properties:{harpooneers:{description:"Which Harpooneers do you like the most ?", type:"string"}}
+      });
+
+      expect(html).toContain('Which Harpooneers do you like the most ?');
+      expect(html).toContain('<input name="harpooneers" type="text">');
+    });
+
+    it("should should render a required field", function() {
+      var html = _render_form_from_schema({
+        properties:{terms_of_service:{descripion:"Do you accept?",required:true,type:"boolean"}}
+      });
+
+      expect(html).toContain('<em>(required)</em>');
+      expect(html).toContain('<input name="terms_of_service" type="checkbox">');
+    });
+
+    it("should should render an optional field", function() {
+      var html = _render_form_from_schema({
+        properties:{newsletter:{descripion:"Do you like spam?",required:false,type:"boolean"}}
+      });
+
+      expect(html).toContain('<em>(optional)</em>');
+      expect(html).toContain('<input name="newsletter" type="checkbox">');
+    });
+
+    it("should should render a simple one-checkbox-form", function() {
+      var html = _render_form_from_schema({
+        properties:{harpooneers:{type:"boolean"}}
+      });
+
+      expect(html).toContain('<input name="harpooneers" type="checkbox">');
+    });
+
+    it("should should render a simple one-select-form", function() {
+      var html = _render_form_from_schema({
+        properties:{mate:{type:"string", enum:["Starbuck", "Stubb", "Flask"]}}
+      });
+
+      expect(html).toContain('<select name="mate">');
+      expect(html).toContain('<option value="Starbuck">Starbuck</option>');
+      expect(html).toContain('<option value="Stubb">Stubb</option>');
+      expect(html).toContain('<option value="Flask">Flask</option>');
+      expect(html).toContain('</select>');
+    });
+
+    it("should should render a simple multi-select-form", function() {
+      var html = _render_form_from_schema({
+        properties:{crosswords:{type:"array",items:{enum:["M", "O", "B", "Y", "D", "I", "C", "K"]}}}
+      });
+
+      expect(html).toContain('<select name="crosswords" multiple="multiple">');
+      expect(html).toContain('<option value="M">M</option>');
+      expect(html).toContain('<option value="D">D</option>');
+      expect(html).toContain('</select>');
+    });
+  });
 });
 

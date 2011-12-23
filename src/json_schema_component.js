@@ -13,9 +13,15 @@ function JsonSchemaComponent(options) {
     throw new Error("JsonSchemaComponent needs a textarea, like this: 'new JsonSchemaComponent({textarea:'#...');'.");
   }
 
+  var _this = this;
   var textarea = $(options.textarea);
   var json = $.parseJSON($(textarea).val());
-  var form = $(options.existing_form);
+
+  _this.render = function() {
+    return $(_this.TEMPLATE).tmpl(options.schema);
+  }
+
+  var form = $(options.existing_form || _this.render().appendTo(options.form));
 
   function get_property_type(name) {
    if (options.schema != null &&

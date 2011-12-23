@@ -53,40 +53,16 @@
 
 <hr style="clear: both;">
 
-<h2>Form</h2>
-<form id=demoform>
-
-    <p> Blogpost title:
-    <input type=text name=title />
-
-    <p> Blogpost Teaser Text:
-    <textarea name=abstract></textarea>
-
-    <p> Public availability:
-    <input type=checkbox name=public />
-
-    <p> Category:
-    <label><input type=radio value=local name=category /> Local</label>
-    <label><input type=radio value=filmcritics name=category /> Filmcritics</label>
-    <label><input type=radio value=politics name=category /> Politics</label>
-
-    <p> Harpooneers:
-    <select name=harpooneers size=5 multiple>
-      <option>Queequeg</option>
-      <option>Tashtego</option>
-      <option>Daggoo</option>
-      <option>Fedallah</option>
-    </select>
-
-</form>
+<form id=demoform></form>
 
 <script src=vendor/jquery-1.7.1.js></script>
 <script src=vendor/jquery.tmpl.js></script>
 <script src=src/json_schema_component.js></script>
+<script src=src/json_schema_component.templates.js></script>
 <script>
 new JsonSchemaComponent({
   schema: JSON.parse($('#schema').val()),
   textarea: $('#demotextarea'),
-  existing_form: $('#demoform')
+  form: $('#demoform')
 });
 </script>

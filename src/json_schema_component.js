@@ -15,7 +15,7 @@ function JsonSchemaComponent(options) {
 
   var textarea = $(options.textarea);
   var json = $.parseJSON($(textarea).val());
-  var form = $(options.form);
+  var form = $(options.existing_form);
 
   function get_property_type(name) {
    if (options.schema != null &&

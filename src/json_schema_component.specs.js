@@ -58,7 +58,7 @@ describe("JsonSchemaComponent", function() {
       fixture.html('<textarea id=testtextarea>{"field_a":"value_a"}</textarea>'+
                    '<form id=testform><input type=text id="testtextfield" name=field_a /></form>');
 
-      new JsonSchemaComponent({schema:{}, textarea:"#testtextarea", form:"#testform"});
+      new JsonSchemaComponent({schema:{}, textarea:"#testtextarea", existing_form:"#testform"});
 
       expect($("#testtextfield").val()).toEqual("value_a");
     });
@@ -70,7 +70,7 @@ describe("JsonSchemaComponent", function() {
                    '<input type=checkbox id="testcheckbox_b" name=field_b />'+
                    '</form>');
 
-      new JsonSchemaComponent({schema:{}, textarea:"#testtextarea", form:"#testform"});
+      new JsonSchemaComponent({schema:{}, textarea:"#testtextarea", existing_form:"#testform"});
 
       expect($("#testcheckbox_a").is(":checked")).toBeTruthy();
       expect($("#testcheckbox_b").is(":checked")).toBeFalsy();
@@ -86,7 +86,7 @@ describe("JsonSchemaComponent", function() {
       new JsonSchemaComponent({
         schema: {properties:{field:{type:"array"}}},
         textarea:"#testtextarea",
-        form:"#testform"
+        existing_form:"#testform"
       });
 
       expect($("#testradiobox_a").is(":checked")).toBeFalsy();
@@ -105,7 +105,7 @@ describe("JsonSchemaComponent", function() {
 
       new JsonSchemaComponent({
         textarea:"#testtextarea",
-        form:"#testform",
+        existing_form:"#testform",
         schema: {
           properties: {
             characters: {
@@ -137,7 +137,7 @@ describe("JsonSchemaComponent", function() {
         '</form>'
       );
 
-      new JsonSchemaComponent({schema:{}, textarea:"#testtextarea", form:"#testform"});
+      new JsonSchemaComponent({schema:{}, textarea:"#testtextarea", existing_form:"#testform"});
 
       $('#testtext').val("Captain Ahab");
       $('#testtext').trigger("change");
@@ -155,7 +155,7 @@ describe("JsonSchemaComponent", function() {
         '</form>'
       );
 
-      new JsonSchemaComponent({schema:{}, textarea:"#testtextarea", form:"#testform"});
+      new JsonSchemaComponent({schema:{}, textarea:"#testtextarea", existing_form:"#testform"});
 
       $('#testtext').val("A story about a man and his whale");
       $('#testtext').trigger("change");
@@ -173,7 +173,7 @@ describe("JsonSchemaComponent", function() {
         '</form>'
       );
 
-      new JsonSchemaComponent({schema:{}, textarea:"#testtextarea", form:"#testform"});
+      new JsonSchemaComponent({schema:{}, textarea:"#testtextarea", existing_form:"#testform"});
 
       $('#testcheckbox').click();
 
@@ -192,7 +192,7 @@ describe("JsonSchemaComponent", function() {
         '</form>'
       );
 
-      new JsonSchemaComponent({schema:{}, textarea:"#testtextarea", form:"#testform"});
+      new JsonSchemaComponent({schema:{}, textarea:"#testtextarea", existing_form:"#testform"});
 
       $('#l').click();
 
@@ -209,7 +209,7 @@ describe("JsonSchemaComponent", function() {
 
       new JsonSchemaComponent({
         textarea:"#testtextarea",
-        form:"#testform",
+        existing_form:"#testform",
         schema: {
           properties: {
             eaten_by_whale: {
@@ -239,7 +239,7 @@ describe("JsonSchemaComponent", function() {
 
       new JsonSchemaComponent({
         textarea:"#testtextarea",
-        form:"#testform",
+        existing_form:"#testform",
         schema: {
           properties: {
             characters: {
@@ -275,7 +275,7 @@ describe("JsonSchemaComponent", function() {
 
       new JsonSchemaComponent({
         textarea:"#testtextarea",
-        form:"#testform",
+        existing_form:"#testform",
         schema: {
           properties: {
             harpooneers: {

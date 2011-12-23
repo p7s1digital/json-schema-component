@@ -124,11 +124,6 @@ describe("JsonSchemaComponent", function() {
   });
 
   describe('form-out features', function() {
-    beforeEach(function () {
-      fixture.html(
-      );
-    });
-
     it("should should update the textarea's json from a simple textfield change", function() {
       fixture.html(
         '<textarea id=testtextarea>{      "title": "Moby Dick"}</textarea>' +

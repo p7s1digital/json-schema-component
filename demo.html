@@ -1,8 +1,19 @@
 <h1>JsonSchemaComponent demo</h1>
+<p>
+<a href="#">[link to this page]</a>
 
-<div style="float: left; width: 49%">
-<h2 style="margin-top: 0px;">Textarea</h2>
-<textarea id=demotextarea rows=25 disabled=disabled style="width: 100%;">
+<div id="formcontainer">
+<h2 style="color: green;">This is generated ..</h2>
+<form style="border: 2px dashed green; padding: 2em; padding-top: 0;" id=demoform></form>
+</div>
+
+<h2 style="color: blue;">.. from this:</h2>
+<div style="float: left; width: 32%">
+<h3 style="margin-top: 0px;">
+  <span style="color: blue;">Data</span>
+  <span style="color: green;">(synchronizes with the above form)</span>
+</h3>
+<textarea id=demotextarea rows=25 style="width: 100%; font-family: monospace;">
 {
   "title": "Moby Dick",
   "abstract": "Something about a white whale and a man..",
@@ -13,9 +24,9 @@
 </textarea>
 </div>
 
-<div style="margin-left: 51%; width: 49%">
-<h2>Schema</h2>
-<textarea id=schema rows=25 disabled=disabled style="width: 100%;">
+<div style="float: left; width: 32%; padding-left: 2%;">
+<h3 style="color: blue; margin-top: 0px;">Schema</h3>
+<textarea id=schema rows=25 style="width: 100%; font-family: monospace;">
 {
   "name" : "Blogpost",
   "properties" : {
@@ -51,18 +62,95 @@
 </textarea>
 </div>
 
-<hr style="clear: both;">
+<div style="float: left; width: 32%; padding-left: 2%;">
+<h3 style="color: blue; margin-top: 0px;">Template</h3>
+<textarea id=template rows=25 style="width: 100%; font-family: monospace;">
+<div>
+<h2>${name}</h2>
+{{each(name, properties) properties}}<p><label>
+ {{if properties.description}}<b>${properties.description}</b>{{/if}}
+ {{if properties.type === "string"}}
+   {{if properties.enum == null}}
+     <input name="${name}" type="text"/>
+   {{else}}
+     <select name="${name}">
+     {{each(index, value) properties.enum}}
+       <option value="${value}">${value}</option>
+     {{/each}}
+   </select>
+   {{/if}}
+ {{/if}}
+ {{if properties.type === "boolean"}}
+   <input name="${name}" type="checkbox"/>
+ {{/if}}
+ {{if properties.type === "array"}}
+   <select name="${name}" multiple=multiple>
+   {{each(index, value) properties.items.enum}}
+     <option value="${value}">${value}</option>
+   {{/each}}
+   </select>
+ {{/if}}
+ {{if properties.required === true}}<em>(required)</em>{{/if}}
+ {{if properties.required === false}}<em>(optional)</em>{{/if}}
+</label></p>{{/each}}
+</div>
+</textarea>
 
-<form id=demoform></form>
+</div>
+
+<hr style="clear: both;">
+<a href="https://github.com/p7s1digital/json-schema-component">JsonSchemaComponent on GitHub</a>
 
 <script src=vendor/jquery-1.7.1.js></script>
 <script src=vendor/jquery.tmpl.js></script>
 <script src=src/json_schema_component.js></script>
 <script src=src/json_schema_component.templates.js></script>
 <script>
+function load_from_hash() {
+  if (!/^#preset=.*/.test(window.location.hash)) {
+    return false;
+  }
+
+  var preset = JSON.parse(decodeURI(
+    /^#preset=(.*)/.exec(window.location.hash)[1]
+  ));
+
+  $("#schema").val(preset.schema);
+  $("#demotextarea").val(preset.data);
+  $("#template").val(preset.template);
+
+  return true;
+}
+
+function save_to_hash() {
+  window.location.hash = encodeURI(
+    "preset=" +
+    JSON.stringify({
+      schema: $('#schema').val(),
+      data: $('#demotextarea').val(),
+      template: $('#template').val(),
+    })
+  );
+
+  document.links[0].href = window.location.hash;
+}
+
+function invalidate_form() {
+  save_to_hash();
+  window.location.reload();
+  $("#formcontainer").replaceWith("<button onclick='javascript:window.location.reload();'>Re-generate form</button>");
+}
+
+$('#demotextarea').change(invalidate_form);
+$('#schema').change(invalidate_form);
+$('#template').change(invalidate_form);
+
+load_from_hash();
+
 new JsonSchemaComponent({
   schema: JSON.parse($('#schema').val()),
   textarea: $('#demotextarea'),
+  template: $('#template').val(),
   form: $('#demoform')
 });
 </script>

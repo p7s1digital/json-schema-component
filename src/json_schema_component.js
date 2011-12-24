@@ -18,7 +18,7 @@ function JsonSchemaComponent(options) {
   var json = $.parseJSON($(textarea).val());
 
   _this.render = function() {
-    return $(_this.TEMPLATE).tmpl(options.schema);
+    return $(options.template || _this.TEMPLATE).tmpl(options.schema);
   }
 
   var form = $(options.existing_form || _this.render().appendTo(options.form));

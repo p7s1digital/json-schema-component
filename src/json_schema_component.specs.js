@@ -363,6 +363,17 @@ describe("JsonSchemaComponent", function() {
       expect(html).toContain('<option value="D">D</option>');
       expect(html).toContain('</select>');
     });
+
+    it("should should render the custom specified template", function() {
+      new JsonSchemaComponent({
+        textarea: "#testtextarea",
+        form: "#testform",
+        template: "<div><b>custom template</b></div>",
+        schema: {}
+      });
+      expect($("#testform").html()).toEqual("<b>custom template</b>");
+    });
+
   });
 });
 

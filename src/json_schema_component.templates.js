@@ -18,7 +18,7 @@ JsonSchemaComponent.prototype.TEMPLATE = (
       '<input name="${name}" type="checkbox"/>' +
     '{{/if}}' +
     '{{if properties.type === "array"}}' +
-      '<select name="${name}" multiple=multiple>' +
+      '<select multiple=multiple name="${name}">' +
       '{{each(index, value) properties.items.enum}}' +
         '<option value="${value}">${value}</option>' +
       '{{/each}}' +

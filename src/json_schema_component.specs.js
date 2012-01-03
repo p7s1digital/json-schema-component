@@ -362,7 +362,7 @@ describe("JsonSchemaComponent", function() {
         properties:{crosswords:{type:"array",items:{"enum":["m", "o", "b", "y", "d", "i", "c", "k"]}}}
       });
 
-      expect(html).toContain('<select name="crosswords" multiple="multiple">');
+      expect(html).toContain('<select multiple="multiple" name="crosswords">');
       expect(html).toContain('<option value="m">m</option>');
       expect(html).toContain('<option value="d">d</option>');
       expect(html).toContain('</select>');

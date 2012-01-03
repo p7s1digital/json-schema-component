@@ -114,7 +114,7 @@ describe("JsonSchemaComponent", function() {
           properties: {
             characters: {
               description: "Your favorite characters from Moby Dick",
-              type: "array",
+              type: "array"
             }
           }
         }
@@ -243,7 +243,7 @@ describe("JsonSchemaComponent", function() {
           properties: {
             characters: {
               description: "Your favorite characters from Moby Dick",
-              type: "array",
+              type: "array"
             }
           }
         }
@@ -278,8 +278,8 @@ describe("JsonSchemaComponent", function() {
         schema: {
           properties: {
             harpooneers: {
-              description: "Which Harpooneers do you like the most ?",
-              type: "array",
+              description: "which harpooneers do you like the most ?",
+              type: "array"
             }
           }
         }

@@ -315,8 +315,8 @@ describe("JsonSchemaComponent", function() {
         properties:{harpooneers:{description:"which harpooneers do you like the most ?", type:"string"}}
       });
 
-      expect(html).toContain('<input name="harpooneers" type="text">');
       expect(html).toContain('which harpooneers do you like the most ?');
+      expect(html).toMatch('<input name="harpooneers".*type="text">');
     });
 
     it("should should render a required field", function() {
@@ -325,7 +325,7 @@ describe("JsonSchemaComponent", function() {
       });
 
       expect(html).toContain('<em>(required)</em>');
-      expect(html).toContain('<input name="terms_of_service" type="checkbox">');
+      expect(html).toMatch('\<input name="terms_of_service".*type="checkbox"\>');
     });
 
     it("should should render an optional field", function() {
@@ -334,7 +334,7 @@ describe("JsonSchemaComponent", function() {
       });
 
       expect(html).toContain('<em>(optional)</em>');
-      expect(html).toContain('<input name="newsletter" type="checkbox">');
+      expect(html).toMatch('<input name="newsletter".*type="checkbox">');
     });
 
     it("should should render a simple one-checkbox-form", function() {
@@ -342,7 +342,7 @@ describe("JsonSchemaComponent", function() {
         properties:{harpooneers:{type:"boolean"}}
       });
 
-      expect(html).toContain('<input name="harpooneers" type="checkbox">');
+      expect(html).toMatch('<input name="harpooneers".*type="checkbox">');
     });
 
     it("should should render a simple one-select-form", function() {

@@ -307,16 +307,16 @@ describe("JsonSchemaComponent", function() {
         form:"#testform",
         schema: schema
       });
-      return $("#testform").html();
+      return $("#testform").html().toLowerCase();
     }
 
     it("should should render a simple one-textfield-form", function() {
       var html = _render_form_from_schema({
-        properties:{harpooneers:{description:"Which Harpooneers do you like the most ?", type:"string"}}
+        properties:{harpooneers:{description:"which harpooneers do you like the most ?", type:"string"}}
       });
 
-      expect(html).toContain('Which Harpooneers do you like the most ?');
       expect(html).toContain('<input name="harpooneers" type="text">');
+      expect(html).toContain('which harpooneers do you like the most ?');
     });
 
     it("should should render a required field", function() {
@@ -347,24 +347,24 @@ describe("JsonSchemaComponent", function() {
 
     it("should should render a simple one-select-form", function() {
       var html = _render_form_from_schema({
-        properties:{mate:{type:"string", enum:["Starbuck", "Stubb", "Flask"]}}
+        properties:{mate:{type:"string", "enum":["starbuck", "stubb", "flask"]}}
       });
 
       expect(html).toContain('<select name="mate">');
-      expect(html).toContain('<option value="Starbuck">Starbuck</option>');
-      expect(html).toContain('<option value="Stubb">Stubb</option>');
-      expect(html).toContain('<option value="Flask">Flask</option>');
+      expect(html).toContain('<option value="starbuck">starbuck</option>');
+      expect(html).toContain('<option value="stubb">stubb</option>');
+      expect(html).toContain('<option value="flask">flask</option>');
       expect(html).toContain('</select>');
     });
 
     it("should should render a simple multi-select-form", function() {
       var html = _render_form_from_schema({
-        properties:{crosswords:{type:"array",items:{enum:["M", "O", "B", "Y", "D", "I", "C", "K"]}}}
+        properties:{crosswords:{type:"array",items:{"enum":["m", "o", "b", "y", "d", "i", "c", "k"]}}}
       });
 
       expect(html).toContain('<select name="crosswords" multiple="multiple">');
-      expect(html).toContain('<option value="M">M</option>');
-      expect(html).toContain('<option value="D">D</option>');
+      expect(html).toContain('<option value="m">m</option>');
+      expect(html).toContain('<option value="d">d</option>');
       expect(html).toContain('</select>');
     });
 

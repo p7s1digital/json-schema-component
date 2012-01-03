@@ -25,6 +25,10 @@ describe("JsonSchemaComponent", function() {
     );
   }
 
+  function json_val(input) {
+    return JSON.parse($(input).val());
+  }
+
   describe('form-in features', function() {
 
     it("should throw an error when invoked w/o arguments", function() {
@@ -137,7 +141,7 @@ describe("JsonSchemaComponent", function() {
       $('#testtext').val("Captain Ahab");
       $('#testtext').trigger("change");
 
-      expect($("#testtextarea").val()).toContain('"title": "Captain Ahab"');
+      expect(json_val($("#testtextarea")).title).toEqual("Captain Ahab");
 
     });
 
@@ -155,7 +159,7 @@ describe("JsonSchemaComponent", function() {
       $('#testtext').val("A story about a man and his whale");
       $('#testtext').trigger("change");
 
-      expect($("#testtextarea").val()).toContain('"abstract": "A story about a man and his whale"');
+      expect(json_val("#testtextarea").abstract).toEqual("A story about a man and his whale");
 
     });
 
@@ -172,7 +176,7 @@ describe("JsonSchemaComponent", function() {
 
       $('#testcheckbox').click();
 
-      expect($("#testtextarea").val()).toContain('"public": "yes"');
+      expect(json_val("#testtextarea").public).toEqual('yes');
 
     });
 
@@ -191,7 +195,7 @@ describe("JsonSchemaComponent", function() {
 
       $('#l').click();
 
-      expect($("#testtextarea").val()).toContain('"category": "local"');
+      expect(json_val("#testtextarea").category).toEqual('local');
     });
 
     it("should should update a boolean field from a check box", function() {
@@ -216,10 +220,10 @@ describe("JsonSchemaComponent", function() {
       });
 
       $('#eaten').click();
-      expect($("#testtextarea").val()).toContain('"eaten_by_whale": false');
+      expect(json_val("#testtextarea").eaten_by_whale).toBeFalsy();
 
       $('#eaten').click();
-      expect($("#testtextarea").val()).toContain('"eaten_by_whale": true');
+      expect(json_val("#testtextarea").eaten_by_whale).toBeTruthy();
     });
 
     it("should should update an array field from a check box", function() {
@@ -246,13 +250,13 @@ describe("JsonSchemaComponent", function() {
       });
 
       $('#a').click();
-      expect(JSON.parse($("#testtextarea").val()).characters).toEqual(["elijah", "ahab"]);
+      expect(json_val($("#testtextarea")).characters).toEqual(["elijah", "ahab"]);
 
       $('#i').click();
-      expect(JSON.parse($("#testtextarea").val()).characters).toEqual(["elijah", "ahab", "ishmael"]);
+      expect(json_val($("#testtextarea")).characters).toEqual(["elijah", "ahab", "ishmael"]);
 
       $('#e').click();
-      expect(JSON.parse($("#testtextarea").val()).characters).toEqual(["ahab", "ishmael"]);
+      expect(json_val($("#testtextarea")).characters).toEqual(["ahab", "ishmael"]);
     });
 
     it("should should update an array field from a select element", function() {
@@ -282,10 +286,10 @@ describe("JsonSchemaComponent", function() {
       });
 
       select_option("#selecttest", "#t", true);
-      expect(JSON.parse($("#testtextarea").val()).harpooneers).toEqual(["Queequeg", "Tashtego"]);
+      expect(json_val($("#testtextarea")).harpooneers).toEqual(["Queequeg", "Tashtego"]);
 
       select_option("#selecttest", "#q", false);
-      expect(JSON.parse($("#testtextarea").val()).harpooneers).toEqual(["Tashtego"]);
+      expect(json_val($("#testtextarea")).harpooneers).toEqual(["Tashtego"]);
     });
   });
 
@@ -371,7 +375,7 @@ describe("JsonSchemaComponent", function() {
         template: "<div><b>custom template</b></div>",
         schema: {}
       });
-      expect($("#testform").html()).toEqual("<b>custom template</b>");
+      expect($("#testform").html().toLowerCase()).toEqual("<b>custom template</b>");
     });
 
   });

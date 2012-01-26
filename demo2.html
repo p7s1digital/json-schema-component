@@ -1,0 +1,254 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="vendor/css/ui-lightness/jquery-ui-1.8.17.custom.css" />
+</head>
+<body>
+<h1>JsonSchemaComponent demo</h1>
+<p>
+<a href="#">[link to this page]</a>
+
+<div id="formcontainer">
+<h2 style="color: green;">This is generated ..</h2>
+<form style="border: 2px dashed green; padding: 2em; padding-top: 0;" id=demoform></form>
+</div>
+
+<h2 style="color: blue;">.. from this:</h2>
+<div style="float: left; width: 32%">
+<h3 style="margin-top: 0px;">
+  <span style="color: blue;">Data</span>
+  <span style="color: green;">(synchronizes with the above form)</span>
+</h3>
+<textarea id=demotextarea rows=25 style="width: 100%; font-family: monospace;">
+{
+  "title": "Rails security",
+  "abstract": "Something about lazy programmers..",
+  "author": "4711",
+  "public": true,
+  "category": "guide",
+  "audience": ["Senior", "Expert"]
+}
+</textarea>
+</div>
+
+<div style="float: left; width: 32%; padding-left: 2%;">
+<h3 style="color: blue; margin-top: 0px;">Schema</h3>
+<textarea id=schema rows=25 style="width: 100%; font-family: monospace;">
+{
+  "name" : "Blogpost",
+  "properties" : {
+    "title" : {
+      "type" : "string",
+      "description" : "Blogpost title",
+      "required" : true
+    },
+    "abstract" : {
+      "type" : "string",
+      "description" : "Blogpost Teaser Text",
+      "required": false
+    },
+    "proglang" : {
+      "type" : "string",
+      "description" : "Covered programming language",
+      "required": false
+    },
+    "author" : {
+      "type" : "string",
+      "description" : "Blog author",
+      "required": false
+    },
+    "public" : {
+      "description" : "Public availability",
+      "type" : "boolean"
+    },
+    "category" : {
+      "description" : "Category",
+      "type" : "string",
+      "enum" : ["guide", "reference"]
+    },
+    "audience" : {
+      "description" : "Target audience",
+      "type" : "array",
+      "items": {
+        "type" : "string",
+        "enum" : ["Beginner", "Senior", "Expert"]
+      }
+    }
+  }
+}
+</textarea>
+</div>
+
+<div style="float: left; width: 32%; padding-left: 2%;">
+<h3 style="color: blue; margin-top: 0px;">Template</h3>
+<textarea id=template rows=25 style="width: 100%; font-family: monospace;">
+<div>
+<h2>${name}</h2>
+{{each(name, properties) properties}}<p><label>
+ {{if properties.description}}<b>${properties.description}</b>{{/if}}
+ {{if properties.type === "string"}}
+   {{if properties.enum == null}}
+     <input name="${name}" id="json-${name}" type="text"/>
+   {{else}}
+     <select name="${name}" id="json-${name}">
+     {{each(index, value) properties.enum}}
+       <option value="${value}">${value}</option>
+     {{/each}}
+   </select>
+   {{/if}}
+ {{/if}}
+ {{if properties.type === "boolean"}}
+   <input name="${name}" id="json-${name}" type="checkbox"/>
+ {{/if}}
+ {{if properties.type === "array"}}
+   <select name="${name}" id="json-${name}" multiple=multiple>
+   {{each(index, value) properties.items.enum}}
+     <option value="${value}">${value}</option>
+   {{/each}}
+   </select>
+ {{/if}}
+ {{if properties.required === true}}<em>(required)</em>{{/if}}
+ {{if properties.required === false}}<em>(optional)</em>{{/if}}
+</label></p>{{/each}}
+</div>
+</textarea>
+
+</div>
+
+<hr style="clear: both;">
+<a href="https://github.com/p7s1digital/json-schema-component">JsonSchemaComponent on GitHub</a>
+
+<script src=vendor/json2.js></script>
+<script src=vendor/jquery-1.7.1.js></script>
+<script src=vendor/jquery.tmpl.js></script>
+<script src=vendor/jquery.ui.core.min.js></script>
+<script src=vendor/jquery.ui.widget.min.js></script>
+<script src=vendor/jquery.ui.position.min.js></script>
+<script src=vendor/jquery.ui.autocomplete.min.js></script>
+<script src=src/json_schema_component.js></script>
+<script src=src/json_schema_component.templates.js></script>
+<script>
+function load_from_hash() {
+  if (!/^#preset=.*/.test(window.location.hash)) {
+    return false;
+  }
+
+  var preset = JSON.parse(decodeURI(
+    /^#preset=(.*)/.exec(window.location.hash)[1]
+  ));
+
+  $("#schema").val(preset.schema);
+  $("#demotextarea").val(preset.data);
+  $("#template").val(preset.template);
+
+  return true;
+}
+
+function save_to_hash() {
+  window.location.hash = encodeURI(
+    "preset=" +
+    JSON.stringify({
+      schema: $('#schema').val(),
+      data: $('#demotextarea').val(),
+      template: $('#template').val()
+    })
+  );
+
+  document.links[0].href = window.location.hash;
+}
+
+function invalidate_form() {
+  save_to_hash();
+  window.location.reload();
+  $("#formcontainer").replaceWith("<button onclick='javascript:window.location.reload();'>Re-generate form</button>");
+}
+
+$('#demotextarea').change(invalidate_form);
+$('#schema').change(invalidate_form);
+$('#template').change(invalidate_form);
+
+load_from_hash();
+
+new JsonSchemaComponent({
+  schema: JSON.parse($('#schema').val()),
+  textarea: $('#demotextarea'),
+  template: $('#template').val(),
+  form: $('#demoform')
+});
+
+// Sample for using autocompletion
+
+var progLanguages = [
+  "ActionScript",
+  "AppleScript",
+  "Asp",
+  "BASIC",
+  "C",
+  "C++",
+  "Clojure",
+  "COBOL",
+  "ColdFusion",
+  "Erlang",
+  "Fortran",
+  "Groovy",
+  "Haskell",
+  "Java",
+  "JavaScript",
+  "Lisp",
+  "Perl",
+  "PHP",
+  "Python",
+  "Ruby",
+  "Scala",
+  "Scheme"
+];
+
+$("input#json-proglang").autocomplete({
+  source: progLanguages
+});
+
+// Sample for a reference with lookup of value and autocompletion
+
+var authors = [
+      { label: "Jane Hart", id: "4710" },
+      { label: "Elliott Masie", id: "4711" },
+      { label: "Cathy Moore", id: "4712" },
+      { label: "Harold Jarche", id: "4713" },
+      { label: "Jane Bozarth", id: "4714" },
+      { label: "Steeve Wheeler", id: "4715" },
+    ],
+    author = $("input#json-author"),
+    field = document.createElement("input"),
+    value = author.val();
+
+field.setAttribute("id", "json-author-proxy");
+field.setAttribute("name", "author_proxy");
+field.setAttribute("value", "");
+
+$(authors).each(function(i, item) {
+  if(item.id == value)
+    field.setAttribute("value", item.label);
+});
+
+author.after(field).css("display", "none").change();
+
+$(field).autocomplete({
+  source: function(request, response) {
+    var term = request.term.toLowerCase(),
+        selection = $(authors).map(function(i, item) {
+          if(item.label.toLowerCase().indexOf(term) >= 0)
+            return item;
+          else
+            return null;
+        });
+
+    response(selection);
+  },
+  select: function(event, ui) {
+    $(field).val(ui.item.label).change();
+    author.val(ui.item.id).change();
+  }
+});
+
+</script>
+</body>
+</html>

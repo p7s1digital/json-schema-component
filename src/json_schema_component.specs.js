@@ -293,6 +293,15 @@ describe("JsonSchemaComponent", function() {
     });
   });
 
+  function _render_form_from_schema(schema) {
+    new JsonSchemaComponent({
+      textarea:"#testtextarea",
+      form:"#testform",
+      schema: schema
+    });
+    return $("#testform").html().toLowerCase();
+  }
+
   describe('form-renderer features', function() {
     beforeEach(function () {
       fixture.html(
@@ -300,15 +309,6 @@ describe("JsonSchemaComponent", function() {
         '<form id=testform></form>'
       );
     });
-
-    function _render_form_from_schema(schema) {
-      new JsonSchemaComponent({
-        textarea:"#testtextarea",
-        form:"#testform",
-        schema: schema
-      });
-      return $("#testform").html().toLowerCase();
-    }
 
     it("should should render a simple one-textfield-form", function() {
       var html = _render_form_from_schema({
@@ -379,5 +379,126 @@ describe("JsonSchemaComponent", function() {
     });
 
   });
+
+  describe('validation features', function() {
+    beforeEach(function () {
+      fixture.html(
+        '<textarea id=testtextarea>{}</textarea>'+
+        '<form id=testform></form>'
+      );
+    });
+
+    describe('html and css', function() {
+      it('should give the form the css class error when the form does not validate', function() {
+        _render_form_from_schema({
+          properties:{title:{type:"string",pattern: "^Moby"}}
+        });
+
+        $("#testform").find("input").val("Not moby dick").trigger("change")
+
+        expect($("#testform").attr("class")).toEqual("error");
+      });
+
+      it('should give clear the css class error when the form validates again', function() {
+        _render_form_from_schema({
+          properties:{title:{type:"string",pattern: "^Moby"}}
+        });
+
+        $("#testform").find("input").val("Not moby dick").trigger("change")
+        $("#testform").find("input").val("Moby dick").trigger("change")
+
+        expect($("#testform").attr("class")).toNotContain("error");
+      });
+
+      it('should display the error in a custom field', function() {
+
+        _render_form_from_schema({
+          properties:{title:{type:"string",pattern: "^Moby"}}
+        });
+        $("#testform").append("<h1 id=title-error>Errors here!</h1>")
+
+        $("#testform").find("input").val("Not moby dick").trigger("change")
+
+        expect($("#title-error").html()).toContain("String does not match pattern");
+        expect($("#title-error").html()).toContain("^Moby");
+        expect($("#title-error").attr("class")).toContain("errorStr");
+      });
+
+      it('should create an error field if none is found', function() {
+
+        _render_form_from_schema({
+          properties:{title:{type:"string",pattern: "^Moby"}}
+        });
+
+        $("#testform").find("input").val("Not moby dick").trigger("change")
+
+        expect($("#title-error").html()).toContain("String does not match pattern");
+        expect($("#title-error").html()).toContain("^Moby");
+      });
+    });
+
+    describe('events', function() {
+
+      it('should have the form fire an errors event if the form fails to validate', function() {
+
+        _render_form_from_schema({
+          properties:{title:{type:"string",pattern: "^Moby"}}
+        });
+
+        var fired = false;
+        $("#testform").on("errors", function() {
+          fired = true;
+        });
+        $("#testform").find("input").val("Not moby dick").trigger("change")
+
+        expect(fired).toBeTruthy()
+      });
+
+      it('should have the form fire an validates event if the form  validates again', function() {
+
+        _render_form_from_schema({
+          properties:{title:{type:"string",pattern: "^Moby"}}
+        });
+
+        var validates = false;
+        $("#testform").on("validates", function() {
+          validates = true;
+        });
+
+        $("#testform").find("input").val("Not moby dick").trigger("change");
+        expect(validates).toBeFalsy()
+
+        $("#testform").find("input").val("Moby dick").trigger("change");
+        expect(validates).toBeTruthy()
+
+      });
+    });
+
+    describe('external', function() {
+
+      it('should display external validation', function() {
+
+        var mycomponent = new JsonSchemaComponent({
+          textarea:"#testtextarea",
+          form:"#testform",
+          schema: {
+            properties:{title:{type:"string"}}
+          }
+        });
+        var backend_error_report = {
+          errors: [{
+            message : "But what's this long face about, Mr. Starbuck;",
+            details : "wilt thou not chase the white whale!",
+            uri     : "/title",
+          }]
+        };
+
+        mycomponent.setValidationReport(backend_error_report);
+
+        expect($("#title-error").html()).toContain("Mr. Starbuck")
+        expect($("#title-error").html()).toContain("white whale")
+      });
+    });
+  })
 });
 

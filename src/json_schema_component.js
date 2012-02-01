@@ -17,11 +17,53 @@ function JsonSchemaComponent(options) {
   var textarea = $(options.textarea);
   var json = $.parseJSON($(textarea).val());
 
+  var validator;
+  if (window.JSV != null) {
+    validator = JSV.createEnvironment();
+  }
+
   _this.render = function() {
     return $(options.template || _this.TEMPLATE).tmpl(options.schema);
   }
 
-  var form = $(options.existing_form || _this.render().appendTo(options.form));
+  if (options.existing_form == null) {
+    _this.render().appendTo(options.form)
+  }
+
+  var form = $(options.existing_form || options.form);
+
+  _this.setValidationReport = function(report) {
+
+    form.toggleClass("error", report.errors.length > 0);
+
+    if (report.errors.length === 0) {
+      // no errors, clear all the messages
+      $.each(json, function(property) {
+        form.find('#' + property + '-error').hide();
+      });
+      form.trigger('validates');
+      return;
+    }
+
+    // There were errors, show them!
+    form.trigger('errors', report.errors);
+
+    $.each(report.errors, function(index, issue) {
+      var property   = issue.uri.split('/')
+                        .splice(-1)[0] /* <- "last element of array" */
+      var message    = issue.message;
+      var details    = issue.details;
+      var element    = form.find('#' + property + '-error');
+
+      if (element.length < 1) {
+        var input = form.find('*[name=' + property + ']');
+        $(input).before("<span id='" + property + "-error' ></span>");
+        element = form.find('#' + property + '-error');
+      }
+
+      $(element).addClass("errorStr").html(message + " (" + details + ")").show();
+    });
+  }
 
   function get_property_type(name) {
    if (options.schema != null &&
@@ -87,6 +129,10 @@ function JsonSchemaComponent(options) {
       }
     } else {
       json[name] = value;
+    }
+
+    if (validator != null) {
+      _this.setValidationReport(validator.validate(json, options.schema));
     }
 
     textarea.val(JSON.stringify(json, null, 2));

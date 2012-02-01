@@ -116,6 +116,12 @@ URLs to the issue tracker.
 This library does not (yet) support the complete JSON Schema specification.
 Pull requests containing tests are welcome!
 
+Changelog
+=========
+
+v0.1 - 2012-01-03
+ - initial, non-public release
+
 Legal
 =====
 

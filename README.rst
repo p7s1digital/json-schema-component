@@ -2,11 +2,11 @@
 JsonSchemaComponent
 ===================
 
-This JavaScript library allows you to
+This JavaScript library will
 
-- generate a HTML form from `JSON Schema <http://json-schema.org/>`_.
-- fill (that) form with a JSON data structure contained in a (hidden) textarea
-- sync changes to the form to the data structure
+- **generate a form** from a given `JSON Schema <http://json-schema.org/>`_,
+- **fill (that) form** with a JSON data structure contained in a (hidden) textarea,
+- **sync changes** to the form to the data structure, and
 
 The combination of these features allows for the rapid development of instant
 user interfaces for JSON APIs, e.g. in CouchDB powered back office GUIs.

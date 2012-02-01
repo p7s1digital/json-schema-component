@@ -37,6 +37,7 @@ application::
     textarea: $('#mytextarea'),
     form: $('#myform')
   });
+  $('#mytextarea').hide()
   </script>
   </body>
   </html>

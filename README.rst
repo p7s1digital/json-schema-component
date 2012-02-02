@@ -188,6 +188,9 @@ Pull requests containing tests are welcome!
 Changelog
 =========
 
+(unreleased)
+  - ignore changes to inputs that are not in the schema
+
 v0.2 - 2012-01-31
  - add validation
 

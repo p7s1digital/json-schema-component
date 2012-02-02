@@ -291,6 +291,36 @@ describe("JsonSchemaComponent", function() {
       select_option("#selecttest", "#q", false);
       expect(json_val($("#testtextarea")).harpooneers).toEqual(["Tashtego"]);
     });
+
+    it("should should not add fields to the data that are in the form but not in the schema (regression)", function() {
+
+      fixture.html(
+        '<textarea id=testtextarea>{"whale": "Moby Dick"}</textarea>'+
+        '<form id=testform>' +
+        'Managed by component: ' +
+        '<input type=text id=whaletext name=whale value="" />' +
+        'Managed externally, ignored by component: ' +
+        '<input type=text id=captaintext name=captain value="Ahab" />' +
+        '</form>'
+      );
+
+      new JsonSchemaComponent({
+        textarea:"#testtextarea",
+        existing_form:"#testform",
+        schema: {
+          properties: {
+            whale: {
+              type: "string"
+            }
+          }
+        }
+      });
+
+      $("#whaletext").trigger("change")
+      $("#captaintext").trigger("change")
+      expect($("#testtextarea").val()).toNotContain("captain");
+      expect($("#testtextarea").val()).toContain("Moby Dick");
+    });
   });
 
   function _render_form_from_schema(schema) {

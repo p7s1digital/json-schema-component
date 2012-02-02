@@ -111,6 +111,12 @@ function JsonSchemaComponent(options) {
      * accordance with the schema.
      */
 
+    if(options.schema != null &&
+       options.schema.properties &&
+       options.schema.properties[name] == null) {
+      return;
+    }
+
     var property_type = get_property_type(name);
 
     if(property_type === "boolean") {

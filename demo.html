@@ -25,7 +25,8 @@
   "abstract": "Something about a white whale and a man..",
   "public": true,
   "category": "politics",
-  "harpooneers": ["Queequeg", "Tashtego"]
+  "harpooneers": ["Queequeg", "Tashtego"],
+  "arrival": "1820-11-20"
 }
 </textarea>
 </div>
@@ -55,6 +56,13 @@
       "description" : "Category",
       "type" : "string",
       "enum" : ["local", "politics", "filmcritics"]
+    },
+    "departure": {
+      "type": "time"
+    },
+    "arrival": {
+      "description": "Arrival",
+      "type": "date"
     },
     "harpooneers" : {
       "description" : "Which Harpooneers do you like the most (choose 2 to 3)?",
@@ -86,8 +94,21 @@
 <script src=vendor/uri.js></script>
 <script src=vendor/jsv.js></script>
 <script src=vendor/json-schema-draft-03.js></script>
-<script src=src/json_schema_component.js></script>
 <script>
+/* the three modules above create a non-standard 'window.require' object, that
+makes the following two libraries trip when loading additional modules */
+delete window.require;
+</script>
+
+<script src="http://afarkas.github.com/webshim/demos/js-webshim/minified/extras/modernizr-custom.js"></script>
+<script src="http://afarkas.github.com/webshim/demos/js-webshim/minified/polyfiller.js"></script>
+
+<script src=src/json_schema_component.js></script>
+
+<script>
+$.webshims.polyfill("forms-ext");
+$.webshims.ready('forms-ext', function() {
+
 function load_from_hash() {
   if (!/^#preset=.*/.test(window.location.hash)) {
     return false;
@@ -145,4 +166,7 @@ demoform.on("errors", function(errors) {
   // do something with the errors
   demoform.find("input[type=submit]").attr("disabled", "disabled");
 });
+
+});
+
 </script>

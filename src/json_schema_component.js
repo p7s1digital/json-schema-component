@@ -37,7 +37,9 @@ function JsonSchemaComponent(options) {
   }
 
   if (options.existing_form == null) {
-    _this.render().appendTo(options.form)
+    var rendered = _this.render();
+    var append_fn = rendered.appendPolyfillTo /* webshims support */ || rendered.appendTo;
+    append_fn.call(rendered, options.form);
   }
 
   var form = $(options.existing_form || options.form);

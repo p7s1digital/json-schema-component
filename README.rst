@@ -150,6 +150,66 @@ Although this library performs validation, you need to apply some validation on
 the server side before saving the user-provided data to your database for
 security reasons.
 
+Widgets for advanced datatypes
+++++++++++++++++++++++++++++++
+
+All form input elements created by JsonSchemaComponent adhere to the coming
+HTML5 forms standard. That is, fields for dates get ``<input type=datetime />``
+markup, etc. If the browsers of your target audience support that, you should
+be fine.
+
+If you want to integrate a JsonSchemaComponent with your GUI toolkit, you can
+augment and attach event handlers to the form after it has been rendered.
+
+However, since - at the time of writing - not all browsers support all HTML5
+form features, here's how to use `WEBSHIMS LIB.'s form-ext module
+<http://afarkas.github.com/webshim/demos/demos/webforms.html>`_ to attach
+fallback widgets for legacy browsers::
+
+  <!-- ... -->
+  <script src="http://afarkas.github.com/webshim/demos/js-webshim/minified/extras/modernizr-custom.js"></script>
+  <script src="http://afarkas.github.com/webshim/demos/js-webshim/minified/polyfiller.js"></script>
+  <script src="path/to/json_schema_component.js">
+
+  $.webshims.polyfill('forms-ext');
+  $.webshims.ready('forms-ext', function() {
+    var mycomponent = new JsonSchemaComponent({
+      schema: {
+        properties: {
+          arrival: {
+            description: "Favorite time of day",
+            type: "date"
+          }
+        }
+      },
+      textarea: /* .. */,
+      form: $("#myform"),
+    });
+  });
+
+Note
+----
+
+If you want to use both validation via JSV and WEBSHIMS LIB. on the same side,
+there is a namespace clash you need to work around. You first need to load JSV,
+then delete the `window.require` property, then load WEBSHIMS LIB. like this::
+
+  <script src=vendor/uri.js></script>
+  <script src=vendor/jsv.js></script>
+  <script src=vendor/json-schema-draft-03.js></script>
+  <script>
+  /* the three modules above create a non-standard 'window.require'
+  object, that makes the following two libraries trip when loading
+  additional modules */
+  delete window.require;
+  </script>
+  <script src="http://afarkas.github.com/webshim/demos/js-webshim/minified/extras/modernizr-custom.js"></script>
+  <script src="http://afarkas.github.com/webshim/demos/js-webshim/minified/polyfiller.js"></script>
+
+If you use your own AMD loader (e.g. `requirejs <http://requirejs.org/>`_)
+these steps should not be neccessary. You could also use a patched version of
+the JSV files.
+
 Development
 ===========
 
@@ -198,6 +258,7 @@ Changelog
 =========
 
 (unreleased)
+  - add support and documentation for advanced widgets via WEBSHIMS LIB.
   - (optionally) registers as AMD module "JsonSchemaComponent"
   - support type=number and type=integer
   - gracefully render <input type=text> for type attributes not explicitly supported

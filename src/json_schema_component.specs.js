@@ -398,6 +398,13 @@ describe("JsonSchemaComponent", function() {
       expect(html).toContain('</select>');
     });
 
+    it("should render plain input boxes for unknown types", function() {
+      var html = _render_form_from_schema({
+        properties:{white_whale_dna_sample:{type:"dna-sequence"}}
+      });
+      expect($("#testform").html().toLowerCase()).toContain('<input name="white_whale_dna_sample"');
+    });
+
     it("should should render the custom specified template", function() {
       new JsonSchemaComponent({
         textarea: "#testtextarea",

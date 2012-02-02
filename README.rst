@@ -202,7 +202,7 @@ Legal
 =====
 
 **Authors**
-  Filip Noetzel <http://filipnoetzel.com/>
+  Filip Noetzel, `Lovely Systems <http://www.lovelysystems.com/>`_, Dornbirn
 
 **License**
   TBD

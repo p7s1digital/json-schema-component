@@ -398,6 +398,12 @@ describe("JsonSchemaComponent", function() {
       expect(html).toContain('</select>');
     });
 
+    it("should render property name for description-less properties", function() {
+      var html = _render_form_from_schema({
+        properties:{descriptionless:{type:"string"}}
+      });
+      expect($("#testform").html().toLowerCase()).toContain('<b>descriptionless</b>');
+    });
 
     it("should render type=date-time", function() {
       var html = _render_form_from_schema({

@@ -166,7 +166,11 @@ JsonSchemaComponent.prototype.TEMPLATE = [
   '<div>',
   '<h2>${name}</h2>',
   '{{each(name, properties) properties}}<p><label>',
-  '  {{if properties.description}}<b>${properties.description}</b>{{/if}}',
+  '  {{if properties.description}}',
+  '    <b>${properties.description}</b>',
+  '  {{else}}',
+  '    <b>${name}</b>',
+  '  {{/if}}',
   '  {{if properties.type === "time" || properties.type === "date"}}',
   '    <input name="${name}" type="${properties.type}"/>',
   '  {{else properties.type === "date-time"}}', // special handling to remove hyphen

@@ -398,6 +398,28 @@ describe("JsonSchemaComponent", function() {
       expect(html).toContain('</select>');
     });
 
+
+    it("should render type=date-time", function() {
+      var html = _render_form_from_schema({
+        properties:{departure:{type:"date-time"}}
+      });
+      expect($("#testform").html().toLowerCase()).toContain('type="datetime"');
+    });
+
+    it("should render type=date", function() {
+      var html = _render_form_from_schema({
+        properties:{departure_date:{type:"date"}}
+      });
+      expect($("#testform").html().toLowerCase()).toContain('type="date"');
+    });
+
+    it("should render type=time", function() {
+      var html = _render_form_from_schema({
+        properties:{departure_time:{type:"time"}}
+      });
+      expect($("#testform").html().toLowerCase()).toContain('type="time"');
+    });
+
     it("should render plain input boxes for unknown types", function() {
       var html = _render_form_from_schema({
         properties:{white_whale_dna_sample:{type:"dna-sequence"}}

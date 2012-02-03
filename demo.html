@@ -1,10 +1,16 @@
+<style>
+  form      { border: 2px dashed green; padding: 2em; padding-top: 0;}
+  .errorStr { color: #8B0000; }
+  .error    { border-color: #8B0000; }
+</style>
+
 <h1>JsonSchemaComponent demo</h1>
 <p>
 <a href="#">[link to this page]</a>
 
 <div id="formcontainer">
 <h2 style="color: green;">This is generated ..</h2>
-<form style="border: 2px dashed green; padding: 2em; padding-top: 0;" id=demoform></form>
+<form id=demoform></form>
 </div>
 
 <h2 style="color: blue;">.. from this:</h2>
@@ -37,8 +43,9 @@
     },
     "abstract" : {
       "type" : "string",
-      "description" : "Blogpost Teaser Text",
-      "required": false
+      "description" : "Blogpost Teaser Text (must contain the word 'whale')",
+      "required": false,
+      "pattern": ".*whale.*"
     },
     "public" : {
       "description" : "Public availability",
@@ -50,8 +57,10 @@
       "enum" : ["local", "politics", "filmcritics"]
     },
     "harpooneers" : {
-      "description" : "Which Harpooneers do you like the most ?",
+      "description" : "Which Harpooneers do you like the most (choose 2 to 3)?",
       "type" : "array",
+      "minItems": 2,
+      "maxItems": 3,
       "items": {
         "type" : "string",
         "enum" : ["Queequeg", "Tashtego", "Daggoo", "Fedallah"]
@@ -64,37 +73,7 @@
 
 <div style="float: left; width: 32%; padding-left: 2%;">
 <h3 style="color: blue; margin-top: 0px;">Template</h3>
-<textarea id=template rows=25 style="width: 100%; font-family: monospace;">
-<div>
-<h2>${name}</h2>
-{{each(name, properties) properties}}<p><label>
- {{if properties.description}}<b>${properties.description}</b>{{/if}}
- {{if properties.type === "string"}}
-   {{if properties.enum == null}}
-     <input name="${name}" type="text"/>
-   {{else}}
-     <select name="${name}">
-     {{each(index, value) properties.enum}}
-       <option value="${value}">${value}</option>
-     {{/each}}
-   </select>
-   {{/if}}
- {{/if}}
- {{if properties.type === "boolean"}}
-   <input name="${name}" type="checkbox"/>
- {{/if}}
- {{if properties.type === "array"}}
-   <select name="${name}" multiple=multiple>
-   {{each(index, value) properties.items.enum}}
-     <option value="${value}">${value}</option>
-   {{/each}}
-   </select>
- {{/if}}
- {{if properties.required === true}}<em>(required)</em>{{/if}}
- {{if properties.required === false}}<em>(optional)</em>{{/if}}
-</label></p>{{/each}}
-</div>
-</textarea>
+<textarea id=template rows=25 style="width: 100%; font-family: monospace;"></textarea>
 
 </div>
 
@@ -104,8 +83,10 @@
 <script src=vendor/json2.js></script>
 <script src=vendor/jquery-1.7.1.js></script>
 <script src=vendor/jquery.tmpl.js></script>
+<script src=vendor/uri.js></script>
+<script src=vendor/jsv.js></script>
+<script src=vendor/json-schema-draft-03.js></script>
 <script src=src/json_schema_component.js></script>
-<script src=src/json_schema_component.templates.js></script>
 <script>
 function load_from_hash() {
   if (!/^#preset=.*/.test(window.location.hash)) {
@@ -142,16 +123,26 @@ function invalidate_form() {
   $("#formcontainer").replaceWith("<button onclick='javascript:window.location.reload();'>Re-generate form</button>");
 }
 
+$('#template').val(JsonSchemaComponent.prototype.TEMPLATE);
+
 $('#demotextarea').change(invalidate_form);
 $('#schema').change(invalidate_form);
 $('#template').change(invalidate_form);
 
 load_from_hash();
 
-new JsonSchemaComponent({
+var demoform = $('#demoform');
+var mycomponent = new JsonSchemaComponent({
   schema: JSON.parse($('#schema').val()),
   textarea: $('#demotextarea'),
   template: $('#template').val(),
-  form: $('#demoform')
+  form: demoform
+});
+demoform.on("validates", function() {
+  demoform.find("input[type=submit]").removeAttr("disabled");
+});
+demoform.on("errors", function(errors) {
+  // do something with the errors
+  demoform.find("input[type=submit]").attr("disabled", "disabled");
 });
 </script>

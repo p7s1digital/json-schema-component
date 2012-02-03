@@ -1,4 +1,3 @@
-
 function JsonSchemaComponent(options) {
 
   if (options == null) {
@@ -17,11 +16,53 @@ function JsonSchemaComponent(options) {
   var textarea = $(options.textarea);
   var json = $.parseJSON($(textarea).val());
 
+  var validator;
+  if (window.JSV != null) {
+    validator = JSV.createEnvironment();
+  }
+
   _this.render = function() {
     return $(options.template || _this.TEMPLATE).tmpl(options.schema);
   }
 
-  var form = $(options.existing_form || _this.render().appendTo(options.form));
+  if (options.existing_form == null) {
+    _this.render().appendTo(options.form)
+  }
+
+  var form = $(options.existing_form || options.form);
+
+  _this.setValidationReport = function(report) {
+
+    form.toggleClass("error", report.errors.length > 0);
+
+    if (report.errors.length === 0) {
+      // no errors, clear all the messages
+      $.each(json, function(property) {
+        form.find('#' + property + '-error').hide();
+      });
+      form.trigger('validates');
+      return;
+    }
+
+    // There were errors, show them!
+    form.trigger('errors', report.errors);
+
+    $.each(report.errors, function(index, issue) {
+      var property   = issue.uri.split('/')
+                        .splice(-1)[0] /* <- "last element of array" */
+      var message    = issue.message;
+      var details    = issue.details;
+      var element    = form.find('#' + property + '-error');
+
+      if (element.length < 1) {
+        var input = form.find('*[name=' + property + ']');
+        $(input).before("<span id='" + property + "-error' ></span>");
+        element = form.find('#' + property + '-error');
+      }
+
+      $(element).addClass("errorStr").html(message + " (" + details + ")").show();
+    });
+  }
 
   function get_property_type(name) {
    if (options.schema != null &&
@@ -69,6 +110,12 @@ function JsonSchemaComponent(options) {
      * accordance with the schema.
      */
 
+    if(options.schema != null &&
+       options.schema.properties &&
+       options.schema.properties[name] == null) {
+      return;
+    }
+
     var property_type = get_property_type(name);
 
     if(property_type === "boolean") {
@@ -87,6 +134,10 @@ function JsonSchemaComponent(options) {
       }
     } else {
       json[name] = value;
+    }
+
+    if (validator != null) {
+      _this.setValidationReport(validator.validate(json, options.schema));
     }
 
     textarea.val(JSON.stringify(json, null, 2));
@@ -110,4 +161,42 @@ function JsonSchemaComponent(options) {
     form_in(input_type, name, value, selected);
   });
 }
+
+JsonSchemaComponent.prototype.TEMPLATE = [
+  '<div>',
+  '<h2>${name}</h2>',
+  '{{each(name, properties) properties}}<p><label>',
+  '  {{if properties.description}}',
+  '    <b>${properties.description}</b>',
+  '  {{else}}',
+  '    <b>${name}</b>',
+  '  {{/if}}',
+  '  {{if properties.type === "time" || properties.type === "date"}}',
+  '    <input name="${name}" type="${properties.type}"/>',
+  '  {{else properties.type === "date-time"}}', // special handling to remove hyphen
+  '    <input name="${name}" type="datetime"/>',
+  '  {{else properties.type === "boolean"}}',
+  '    <input name="${name}" type="checkbox"/>',
+  '  {{else properties.type === "array"}}',
+  '    <select multiple=multiple name="${name}">',
+  '    {{each(index, value) properties.items.enum}}',
+  '      <option value="${value}">${value}</option>',
+  '    {{/each}}',
+  '    </select>',
+  '  {{else}}', // catches properties.type === "string" and unknown cases
+  '    {{if properties.enum == null}}',
+  '      <input name="${name}" type="text"/>',
+  '    {{else}}',
+  '      <select name="${name}">',
+  '     {{each(index, value) properties.enum}}',
+  '       <option value="${value}">${value}</option>',
+  '     {{/each}}',
+  '    </select>',
+  '  {{/if}}',
+  '{{/if}}',
+  '{{if properties.required === true}}<em>(required)</em>{{/if}}',
+  '{{if properties.required === false}}<em>(optional)</em>{{/if}}',
+  '</label></p>{{/each}}',
+  '</div>'
+].join('\n');
 

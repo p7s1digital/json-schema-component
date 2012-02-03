@@ -433,6 +433,20 @@ describe("JsonSchemaComponent", function() {
       expect($("#testform").html().toLowerCase()).toContain('<input name="white_whale_dna_sample"');
     });
 
+    it("should render type=number", function() {
+      var html = _render_form_from_schema({
+        properties:{whales_qty:{type:"integer"}}
+      });
+      expect($("#testform").html().toLowerCase()).toContain('type="number"');
+    });
+
+    it("should render type=integer", function() {
+      var html = _render_form_from_schema({
+        properties:{whale_distance:{type:"number"}}
+      });
+      expect($("#testform").html().toLowerCase()).toContain('type="number"');
+    });
+
     it("should should render the custom specified template", function() {
       new JsonSchemaComponent({
         textarea: "#testtextarea",
@@ -499,6 +513,27 @@ describe("JsonSchemaComponent", function() {
 
         expect($("#title-error").html()).toContain("String does not match pattern");
         expect($("#title-error").html()).toContain("^Moby");
+      });
+
+      it('should add integers as integers to data', function() {
+        _render_form_from_schema({
+          properties:{num_whales:{type:"integer"}}
+        });
+
+        $("#testform").find("input").val("12").trigger("change")
+        expect(json_val($("#testtextarea")).num_whales).toEqual(12);
+        expect(json_val($("#testtextarea")).num_whales).toNotEqual("12");
+      });
+
+      it('should add numbers as floats to data', function() {
+        _render_form_from_schema({
+          properties:{whale_size:{type:"number"}}
+        });
+
+        $("#testform").find("input").val("85.1").trigger("change")
+        expect(json_val($("#testtextarea")).whale_size).toEqual(85.1);
+        expect(json_val($("#testtextarea")).whale_size).toNotEqual("85.1");
+        expect(json_val($("#testtextarea")).whale_size).toNotEqual(85);
       });
     });
 

@@ -120,6 +120,10 @@ function JsonSchemaComponent(options) {
 
     if(property_type === "boolean") {
       json[name] = selected;
+    } else if(property_type === "integer") {
+      json[name] = parseInt(value, 10);
+    } else if(property_type === "number") {
+      json[name] = parseFloat(value);
     } else if (property_type === "array" && input_type !== "select") {
       json[name] = json[name] || [];
       var pos = json[name].indexOf(value);
@@ -175,6 +179,8 @@ JsonSchemaComponent.prototype.TEMPLATE = [
   '    <input name="${name}" type="${properties.type}"/>',
   '  {{else properties.type === "date-time"}}', // special handling to remove hyphen
   '    <input name="${name}" type="datetime"/>',
+  '  {{else properties.type === "integer" || properties.type === "number"}}',
+  '    <input name="${name}" type="number"/>',
   '  {{else properties.type === "boolean"}}',
   '    <input name="${name}" type="checkbox"/>',
   '  {{else properties.type === "array"}}',

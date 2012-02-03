@@ -203,7 +203,10 @@ var progLanguages = [
 ];
 
 $("input#json-proglang").autocomplete({
-  source: progLanguages
+  source: progLanguages,
+  select: function(event, ui) {
+    $("input#json-proglang").val(ui.item.label).change();
+  }
 });
 
 // Sample for a reference with lookup of value and autocompletion

@@ -1,3 +1,14 @@
+(function (factory) {
+   if (typeof define === 'function' && define.amd) {
+     // AMD. Register as an anonymous module.
+     define("JsonSchemaComponent", ['jquery'], factory);
+   } else {
+     // RequireJS isn't being used. Assume JsonSchemaComponent is loaded in <script> tags
+     window.JsonSchemaComponent = factory(jQuery);
+   }
+}(function($) {
+
+
 function JsonSchemaComponent(options) {
 
   if (options == null) {
@@ -205,4 +216,9 @@ JsonSchemaComponent.prototype.TEMPLATE = [
   '</label></p>{{/each}}',
   '</div>'
 ].join('\n');
+
+return JsonSchemaComponent;
+
+
+}));
 

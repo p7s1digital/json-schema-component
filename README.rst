@@ -189,6 +189,7 @@ Changelog
 =========
 
 (unreleased)
+  - (optionally) registers as AMD module "JsonSchemaComponent"
   - support type=number and type=integer
   - gracefully render <input type=text> for type attributes not explicitly supported
   - ignore changes to inputs that are not in the schema

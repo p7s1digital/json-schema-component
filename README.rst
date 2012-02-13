@@ -24,7 +24,7 @@ application::
   <!-- .. -->
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js">
   <script src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js">
-  <script src="path/to/json_schema_component.js">
+  <script src="path/to/JsonSchemaComponent.js">
   <script>
   new JsonSchemaComponent({
     schema: {
@@ -45,7 +45,7 @@ application::
 
 You need to include `jQuery <http://jquery.com/>`_ (tested with 1.7.1) and
 `jQuery.tmpl <https://github.com/jquery/jquery-tmpl>`_ before including
-``json_schema_component.js``. If you also want to support browsers without
+``JsonSchemaComponent.js``. If you also want to support browsers without
 native JSON support, you need to include Douglas Crockford's `json2.js
 <https://github.com/douglascrockford/JSON-js>`_.
 
@@ -169,7 +169,7 @@ fallback widgets for legacy browsers::
   <!-- ... -->
   <script src="http://afarkas.github.com/webshim/demos/js-webshim/minified/extras/modernizr-custom.js"></script>
   <script src="http://afarkas.github.com/webshim/demos/js-webshim/minified/polyfiller.js"></script>
-  <script src="path/to/json_schema_component.js">
+  <script src="path/to/JsonSchemaComponent.js">
 
   $.webshims.polyfill('forms-ext');
   $.webshims.ready('forms-ext', function() {
@@ -234,7 +234,7 @@ Tests
 
 Testing this library is done using `Jasmine BDD
 <http://pivotal.github.com/jasmine/>`_. You can find the test suite in
-``src/json_schema_component.specs.js`` and execute the tests in your browser at
+``src/JsonSchemaComponent.specs.js`` and execute the tests in your browser at
 https://peritus.s3.amazonaws.com/json_schema_component/tests.html.
 
 At the moment we know the tests work in Google Chrome, Safari, Firefox 9 and

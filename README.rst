@@ -160,6 +160,15 @@ this::
   git clone https://github.com/p7s1digital/json-schema-component.git
   cd json-schema-component
 
+
+AMD compatibility
++++++++++++++++++
+
+JsonSchemaComponent comes with optional `AMD loader
+<https://github.com/amdjs/amdjs-api>`_ compatibilty and can be required as
+"JsonSchemaComponent". The only hard dependency is jQuery, please make sure all
+optional dependencies are present.
+
 Tests
 +++++
 

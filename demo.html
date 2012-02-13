@@ -166,6 +166,7 @@ demoform.on("errors", function(errors) {
   // do something with the errors
   demoform.find("input[type=submit]").attr("disabled", "disabled");
 });
+demoform.append("<input type=submit value=Send /> (<i>form needs to validate for this to be enabled</i>)");
 
 });
 

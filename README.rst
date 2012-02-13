@@ -282,8 +282,8 @@ Changelog
 =========
 
 (unreleased)
-  - add support and documentation for advanced widgets via WEBSHIMS LIB.
   - support autocomplete via datalist
+  - support advanced HTML5 widgets via WEBSHIMS LIB.
   - (optionally) registers as AMD module "JsonSchemaComponent"
   - support type=number and type=integer
   - gracefully render <input type=text> for type attributes not explicitly supported

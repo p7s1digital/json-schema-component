@@ -9,7 +9,7 @@
 <a href="#">[link to this page]</a>
 
 <div id="formcontainer">
-<h2 style="color: green;">This is generated ..</h2>
+<h2 style="color: green;">This form is generated ..</h2>
 <form id=demoform></form>
 </div>
 
@@ -21,10 +21,10 @@
 </h3>
 <textarea id=demotextarea rows=25 style="width: 100%; font-family: monospace;">
 {
-  "title": "Moby Dick",
-  "abstract": "Something about a white whale and a man..",
-  "public": true,
-  "category": "politics",
+  "ship_name": "Pequod",
+  "abstract": "To seek out a specific whale",
+  "revenge": true,
+  "captain": "Ahab",
   "harpooneers": ["Queequeg", "Tashtego"],
   "arrival": "1820-11-20"
 }
@@ -35,27 +35,28 @@
 <h3 style="color: blue; margin-top: 0px;">Schema</h3>
 <textarea id=schema rows=25 style="width: 100%; font-family: monospace;">
 {
-  "name" : "Blogpost",
+  "name" : "Sea voyage",
   "properties" : {
-    "title" : {
+    "ship_name" : {
       "type" : "string",
-      "description" : "Blogpost title",
-      "required" : true
+      "description" : "Ship name",
+      "required" : true,
+      "pattern": ".+"
     },
     "abstract" : {
       "type" : "string",
-      "description" : "Blogpost Teaser Text (must contain the word 'whale')",
+      "description" : "Travel purpose (must contain the word 'whale')",
       "required": false,
       "pattern": ".*whale.*"
     },
-    "public" : {
-      "description" : "Public availability",
+    "revenge" : {
+      "description" : "Revenge ?",
       "type" : "boolean"
     },
-    "category" : {
-      "description" : "Category",
+    "captain" : {
+      "description" : "Captain",
       "type" : "string",
-      "enum" : ["local", "politics", "filmcritics"]
+      "enum" : ["Ahab", "Picard", "Han Solo", "Anakin Skywalker"]
     },
     "departure": {
       "type": "time"
@@ -166,7 +167,7 @@ demoform.on("errors", function(errors) {
   // do something with the errors
   demoform.find("input[type=submit]").attr("disabled", "disabled");
 });
-demoform.append("<input type=submit value=Send /> (<i>form needs to validate for this to be enabled</i>)");
+demoform.append("<input type=submit value='Set sails!' /> (<i>form needs to validate for this to be enabled</i>)");
 
 });
 

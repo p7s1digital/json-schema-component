@@ -210,6 +210,30 @@ If you use your own AMD loader (e.g. `requirejs <http://requirejs.org/>`_)
 these steps should not be neccessary. You could also use a patched version of
 the JSV files.
 
+Autocomplete
+++++++++++++
+
+JsonSchemaComponent creates a
+`datalist element <http://dev.w3.org/html5/markup/datalist.html>`_ for every
+field in the form you generate to allow autocompletion (think "Google
+Suggest"). Changing the suggestion list is as easy as appending ``option``
+elements to a ``select`` element::
+
+  mycomponent.setDatalist('author',
+    '<option value="melville">Herman Melville</option>' +
+    '<option value="shakespeare">William Shakespeare</option>');
+
+(The first argument of ``setDatalist`` is the property name of the field the
+datalist is about, the second argument is a string of html containing option
+elements with suggestions.)
+
+In modern browsers supporting datalist this should offer an instant
+autocomplete list; If you use the WEBSHIMS LIB. as described above you will get
+this functionality also in older browsers.
+
+The demo page included in the repository has an example on how to use Ajax to
+load the suggestion list.
+
 Development
 ===========
 
@@ -259,6 +283,7 @@ Changelog
 
 (unreleased)
   - add support and documentation for advanced widgets via WEBSHIMS LIB.
+  - support autocomplete via datalist
   - (optionally) registers as AMD module "JsonSchemaComponent"
   - support type=number and type=integer
   - gracefully render <input type=text> for type attributes not explicitly supported

@@ -37,6 +37,12 @@
 {
   "name" : "Sea voyage",
   "properties" : {
+    "chapter" : {
+      "type" : "integer",
+      "description" : "Current chapter (autocomplete!)",
+      "minimum": 1,
+      "maximum": 135
+    },
     "ship_name" : {
       "type" : "string",
       "description" : "Ship name",
@@ -75,7 +81,13 @@
         "enum" : ["Queequeg", "Tashtego", "Daggoo", "Fedallah"]
       }
     }
-  }
+  },
+  "links": [
+    {
+      "rel": "chapter",
+      "href": "http://www.mobydickthewhale.com/moby-dick/moby-dick-chapter-{chapter}.htm"
+    }
+  ]
 }
 </textarea>
 </div>
@@ -168,6 +180,17 @@ demoform.on("errors", function(errors) {
   demoform.find("input[type=submit]").attr("disabled", "disabled");
 });
 demoform.append("<input type=submit value='Set sails!' /> (<i>form needs to validate for this to be enabled</i>)");
+
+$.ajax({
+  url: "demo_chapters.json",
+  success: function(data) {
+    var html = '';
+    $.each(data, function(value, description) {
+      html += '<option value="' + value + '">' + description + '</option>';
+    });
+    mycomponent.setDatalist('chapter', html);
+  }
+});
 
 });
 

@@ -44,6 +44,11 @@ function JsonSchemaComponent(options) {
 
   var form = $(options.existing_form || options.form);
 
+  _this.setDatalist = function(field, datalist) {
+    var html_fn = rendered.htmlPolyfill /* webshims support */ || rendered.html;
+    html_fn.call($('#' + field + '_datalist'), "<select>" + datalist + "</select>");
+  };
+
   _this.setValidationReport = function(report) {
 
     form.toggleClass("error", report.errors.length > 0);
@@ -189,13 +194,13 @@ JsonSchemaComponent.prototype.TEMPLATE = [
   '    <b>${name}</b>',
   '  {{/if}}',
   '  {{if properties.type === "time" || properties.type === "date"}}',
-  '    <input name="${name}" type="${properties.type}"/>',
+  '    <input name="${name}" list="${name}_datalist" type="${properties.type}"/>',
   '  {{else properties.type === "date-time"}}', // special handling to remove hyphen
-  '    <input name="${name}" type="datetime"/>',
+  '    <input name="${name}" list="${name}_datalist" type="datetime"/>',
   '  {{else properties.type === "integer" || properties.type === "number"}}',
-  '    <input name="${name}" type="number"/>',
+  '    <input name="${name}" list="${name}_datalist" type="number"/>',
   '  {{else properties.type === "boolean"}}',
-  '    <input name="${name}" type="checkbox"/>',
+  '    <input name="${name}" list="${name}_datalist" type="checkbox"/>',
   '  {{else properties.type === "array"}}',
   '    <select multiple=multiple name="${name}">',
   '    {{each(index, value) properties.items.enum}}',
@@ -204,7 +209,7 @@ JsonSchemaComponent.prototype.TEMPLATE = [
   '    </select>',
   '  {{else}}', // catches properties.type === "string" and unknown cases
   '    {{if properties.enum == null}}',
-  '      <input name="${name}" type="text"/>',
+  '      <input name="${name}" list="${name}_datalist" type="text"/>',
   '    {{else}}',
   '      <select name="${name}">',
   '     {{each(index, value) properties.enum}}',
@@ -216,6 +221,7 @@ JsonSchemaComponent.prototype.TEMPLATE = [
   '{{if properties.required === true}}<em>(required)</em>{{/if}}',
   '{{if properties.required === false}}<em>(optional)</em>{{/if}}',
   '</label></p>{{/each}}',
+  '{{each(name, properties) properties}}<datalist id="${name}_datalist"></datalist>{{/each}}',
   '</div>'
 ].join('\n');
 

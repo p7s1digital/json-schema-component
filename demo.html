@@ -4,9 +4,11 @@
 <meta charset=utf-8>
 <title>JsonSchemaComponent demo</title>
 <style>
-  form      { border: 2px dashed green; padding: 2em; padding-top: 0;}
-  .errorStr { color: #8B0000; }
-  .error    { border-color: #8B0000; }
+  form           { border: 2px dashed green; padding: 2em; padding-top: 0;}
+  .errorStr      { color: #8B0000; font-weight: bold; display: block; }
+  .error         { border-color: #8B0000; border-width: 5px; }
+  label b        { display: block; }
+  input, select  { width: 22em; }
 </style>
 </head>
 <body>
@@ -42,7 +44,7 @@
 <h3 style="color: blue; margin-top: 0px;">Schema</h3>
 <textarea id=schema rows=25 style="width: 100%; font-family: monospace;">
 {
-  "name" : "Sea voyage",
+  "name" : "Sea voyage form",
   "properties" : {
     "chapter" : {
       "type" : "integer",
@@ -60,11 +62,12 @@
       "type" : "string",
       "description" : "Travel purpose (must contain the word 'whale')",
       "required": false,
-      "pattern": ".*whale.*"
+      "pattern": "whale"
     },
     "revenge" : {
       "description" : "Revenge ?",
-      "type" : "boolean"
+      "type" : "boolean",
+      "enum": [true]
     },
     "captain" : {
       "description" : "Captain",

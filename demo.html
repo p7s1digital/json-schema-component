@@ -180,7 +180,22 @@ var mycomponent = new JsonSchemaComponent({
   schema: JSON.parse($('#schema').val()),
   textarea: $('#demotextarea'),
   template: $('#template').val(),
-  form: demoform
+  form: demoform,
+  validation_errors_formatter: function(errors) {
+    return $.map(errors, function(error) {
+      error.message = ({
+        "The number of items is greater then the required maximum": "That's too much, Mate!",
+        "The number of items is less then the required minimum": "Arrr! Select more, Limey!",
+      }[error.message] || error.message);
+
+      if (error.details === "/whale/") {
+        delete error.details
+        error.message = "Does not contain the word whale!";
+      }
+
+      return error;
+    })
+  }
 });
 demoform.on("validates", function() {
   demoform.find("input[type=submit]").removeAttr("disabled");

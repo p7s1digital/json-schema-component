@@ -25,6 +25,9 @@ function JsonSchemaComponent(options) {
 
   var _this = this;
   var textarea = $(options.textarea);
+  var validation_errors_formatter = options.validation_errors_formatter || function(errors) {
+    return errors;
+  }
   var json = $.parseJSON($(textarea).val());
 
   var validator;
@@ -49,11 +52,13 @@ function JsonSchemaComponent(options) {
     html_fn.call($('#' + field + '_datalist'), "<select>" + datalist + "</select>");
   };
 
-  _this.setValidationReport = function(report) {
+  _this.setValidationErrors = function(errors) {
 
-    form.toggleClass("error", report.errors.length > 0);
+    errors = validation_errors_formatter(errors);
 
-    if (report.errors.length === 0) {
+    form.toggleClass("error", errors.length > 0);
+
+    if (errors.length === 0) {
       // no errors, clear all the messages
       $.each(json, function(property) {
         form.find('#' + property + '-error').hide();
@@ -63,13 +68,15 @@ function JsonSchemaComponent(options) {
     }
 
     // There were errors, show them!
-    form.trigger('errors', report.errors);
+    form.trigger('errors', errors);
 
-    $.each(report.errors, function(index, issue) {
+    $.each(errors, function(index, issue) {
       var property   = issue.uri.split('/')
                         .splice(-1)[0] /* <- "last element of array" */
       var message    = issue.message;
-      var details    = issue.details;
+      if (issue.details) {
+        message += " (" + issue.details + ")";
+      }
       var element    = form.find('#' + property + '-error');
 
       if (element.length < 1) {
@@ -78,8 +85,13 @@ function JsonSchemaComponent(options) {
         element = form.find('#' + property + '-error');
       }
 
-      $(element).addClass("errorStr").html(message + " (" + details + ")").show();
+      $(element).addClass("errorStr").html(message).show();
     });
+  }
+
+  _this.setValidationReport = function(report) {
+     /* TODO deprecate this function */
+     _this.setValidationErrors(report.errors);
   }
 
   function get_property_type(name) {
@@ -159,7 +171,7 @@ function JsonSchemaComponent(options) {
     }
 
     if (validator != null) {
-      _this.setValidationReport(validator.validate(json, options.schema));
+      _this.setValidationErrors(validator.validate(json, options.schema).errors);
     }
 
     textarea.val(JSON.stringify(json, null, 2));

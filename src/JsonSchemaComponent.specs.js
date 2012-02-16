@@ -576,7 +576,7 @@ describe("JsonSchemaComponent", function() {
 
     describe('external', function() {
 
-      it('should display external validation', function() {
+      it('*deprecated* should include setValidationReport', function() {
 
         var mycomponent = new JsonSchemaComponent({
           textarea:"#testtextarea",
@@ -597,6 +597,54 @@ describe("JsonSchemaComponent", function() {
 
         expect($("#title-error").html()).toContain("Mr. Starbuck")
         expect($("#title-error").html()).toContain("white whale")
+      });
+
+      it('should include setValidationErrors', function() {
+
+        var mycomponent = new JsonSchemaComponent({
+          textarea:"#testtextarea",
+          form:"#testform",
+          schema: {
+            properties:{title:{type:"string"}}
+          }
+        });
+
+        mycomponent.setValidationErrors([{
+          message : "But what's this short face about, Mr. Starbuck;",
+          details : "wilt thou not chase the black whale!",
+          uri     : "/title",
+        }]);
+
+        expect($("#title-error").html()).toContain("short face")
+        expect($("#title-error").html()).toContain("black whale")
+      });
+
+    });
+
+    describe('validation_errors_formatter', function() {
+      it('should use validation_errors_formatter', function() {
+
+        var mycomponent = new JsonSchemaComponent({
+          textarea:"#testtextarea",
+          form:"#testform",
+          schema: {
+            properties:{contains_whale:{type:"string", pattern:"whale"}}
+          },
+          validation_errors_formatter: function(errors) {
+            /* Translate error messages to german */
+            return $.map(errors, function(error) {
+              console.log(error);
+              if (error.message === "String does not match pattern") {
+                error.message = "Zeichenkette passt nicht mit Muster zusammen"
+              }
+              return error;
+            });
+          }
+        });
+        $("#testform").find("input").val("Enthaelt nicht das englische Wort fuer Wal").trigger("change");
+
+        expect($("#contains_whale-error").html()).toContain("Zeichenkette")
+
       });
     });
   })

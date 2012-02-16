@@ -75,6 +75,10 @@ properties here*/});`` accepts:
   The jquery.tmpl template used to generate the form using the schema. The
   default template will be used if omitted.
 
+**validation_errors_formatter** <function> (optional)
+  A function that translates or formats JSV validation reports. Defaults to
+  ``function(errors) {return errors;}``.
+
 Validation
 ++++++++++
 
@@ -122,8 +126,8 @@ Server side validation
 ----------------------
 
 If you want to (instead of or in addition to client side validation) want to
-display server side validation errors, you can do so by feeding a JSV report
-compatible JavaScript object to ``setValidationReport`` like this::
+display server side validation errors, you can do so by feeding a JSV error
+report compatible JavaScript object to ``setValidationErrors`` like this::
 
   var mycomponent = new JsonSchemaComponent({
     schema   : /* .. */,
@@ -132,16 +136,41 @@ compatible JavaScript object to ``setValidationReport`` like this::
   });
 
   // this could be from ajax
-  var backend_error_report = {
-    errors: [{
-      message : "But what's this long face about, Mr. Starbuck; wilt thou not chase the white whale!",
-      details : "no specific reason",
-      uri     : "/title",
-    }]
-  };
-  mycomponent.setValidationReport(backend_error_report);
+  var backend_error_report = [{
+    message : "But what's this long face about, Mr. Starbuck; wilt thou not chase the white whale!",
+    details : "no specific reason",
+    uri     : "/title",
+  }]
+  mycomponent.setValidationErrors(backend_error_report);
 
-You can learn more about JSV's Report format at the "Example" section of `it's documentation <https://github.com/garycourt/JSV#readme>`_.
+You can learn more about JSV's Report format at the "Example" section of `it's
+documentation <https://github.com/garycourt/JSV#readme>`_.
+
+Translating or formatting validation errors
+-------------------------------------------
+
+If you want to translate JSV's (or your server's) validation errors to your
+mother tongue, you can specify a translating function as the
+``validation_errors_formatter`` parameter at construction time like this::
+
+  var mycomponent = new JsonSchemaComponent({
+    schema   : /* .. */,
+    textarea : /* .. */,
+    form     : /* .. */,
+    validation_errors_formatter: function(errors) {
+      /* Translate error messages to german */
+      return $.map(errors, function(error) {
+        if (error.message === "The number of items is greater then the required maximum") {
+          error.message = "Die Anzahl der Einträge ist größer als das erforderliche Maximum"
+        }
+        return error;
+      });
+    }
+  });
+
+The array ``errors`` fed to the ``validation_errors_formatter`` function is in
+the same form as JSV's error report and the same as mentioned above. Errors set
+via ``setValidationErrors`` are also piped through this function.
 
 Note
 ----
@@ -282,6 +311,8 @@ Changelog
 =========
 
 (unreleased)
+  - add validation_errors_formatter
+  - replace setValidationReport w/ setValidationErrors (former will be deprecated soon)
   - support autocomplete via datalist
   - support advanced HTML5 widgets via WEBSHIMS LIB.
   - (optionally) registers as AMD module "JsonSchemaComponent"

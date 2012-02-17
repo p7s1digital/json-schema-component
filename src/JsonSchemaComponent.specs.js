@@ -292,6 +292,68 @@ describe("JsonSchemaComponent", function() {
       expect(json_val($("#testtextarea")).harpooneers).toEqual(["Tashtego"]);
     });
 
+    it("should should update an array field from text field with tag separator", function() {
+      fixture.html(
+        '<textarea id=testtextarea>{"things": ["harpoon", "anchor"]}</textarea>'+
+        '<form id=testform>' +
+        '<input type=text id=tagtest name=things />' +
+        '</form>'
+      );
+
+      new JsonSchemaComponent({
+        textarea:"#testtextarea",
+        existing_form:"#testform",
+        schema: {
+          properties: {
+            things: {
+              description: "Things to take on a whale hunt",
+              type: "array"
+            }
+          }
+        }
+      });
+
+      expect(json_val($("#testtextarea")).things).toEqual(["harpoon", "anchor"]);
+      $("#testform").find("input").val("air matress").trigger("change")
+      expect(json_val($("#testtextarea")).things).toEqual(["air matress"]);
+      $("#testform").find("input").val("wooden leg, sunglasses, whiskey").trigger("change")
+      expect(json_val($("#testtextarea")).things).toEqual(["wooden leg", "sunglasses", "whiskey"]);
+      $("#testform").find("input").val("").trigger("change")
+      expect(json_val($("#testtextarea")).things).toEqual([""]);
+    });
+
+    it("should should update an array field from text field with a custom tag separator", function() {
+      fixture.html(
+        '<textarea id=testtextarea>{"things": ["harpoon", "anchor"]}</textarea>'+
+        '<form id=testform>' +
+        '<input type=text id=tagtest name=things />' +
+        '</form>'
+      );
+
+      new JsonSchemaComponent({
+        split_tags_by: /XXX/,
+        textarea:"#testtextarea",
+        existing_form:"#testform",
+        schema: {
+          properties: {
+            things: {
+              description: "Things to take on a whale hunt",
+              type: "array"
+            }
+          }
+        }
+      });
+
+      expect(json_val($("#testtextarea")).things).toEqual(["harpoon", "anchor"]);
+      $("#testform").find("input").val("air matress").trigger("change")
+      expect(json_val($("#testtextarea")).things).toEqual(["air matress"]);
+      $("#testform").find("input").val("wooden legXXXsunglassesXXXwhiskey").trigger("change")
+      expect(json_val($("#testtextarea")).things).toEqual(["wooden leg", "sunglasses", "whiskey"]);
+      $("#testform").find("input").val("").trigger("change")
+      expect(json_val($("#testtextarea")).things).toEqual([""]);
+    });
+
+
     it("should should not add fields to the data that are in the form but not in the schema (regression)", function() {
 
       fixture.html(

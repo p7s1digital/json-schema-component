@@ -45,6 +45,8 @@ function JsonSchemaComponent(options) {
     append_fn.call(rendered, options.form);
   }
 
+  split_tags_by = RegExp(options.split_tags_by || /,\ */);
+
   var form = $(options.existing_form || options.form);
 
   _this.setDatalist = function(field, datalist) {
@@ -154,6 +156,8 @@ function JsonSchemaComponent(options) {
       json[name] = parseInt(value, 10);
     } else if(property_type === "number") {
       json[name] = parseFloat(value);
+    } else if (property_type === "array" && input_type == "text") {
+      json[name] = value.split(split_tags_by);
     } else if (property_type === "array" && input_type !== "select") {
       json[name] = json[name] || [];
       var pos = json[name].indexOf(value);
@@ -213,7 +217,7 @@ JsonSchemaComponent.prototype.TEMPLATE = [
   '    <input name="${name}" list="${name}_datalist" type="number"/>',
   '  {{else properties.type === "boolean"}}',
   '    <input name="${name}" list="${name}_datalist" type="checkbox"/>',
-  '  {{else properties.type === "array"}}',
+  '  {{else !(!properties.items || properties.type !== "array")  }}', // can't use "&" inside jQuery.tmpl :(
   '    <select multiple=multiple name="${name}">',
   '    {{each(index, value) properties.items.enum}}',
   '      <option value="${value}">${value}</option>',

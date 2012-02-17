@@ -79,6 +79,10 @@ properties here*/});`` accepts:
   A function that translates or formats JSV validation reports. Defaults to
   ``function(errors) {return errors;}``.
 
+**split_tags_by** <RegExp> (optional)
+  For fields with type ``array`` but without predefined ``items``, use this as
+  a list separator. Defaults to ``/,\ */``.
+
 Validation
 ++++++++++
 
@@ -311,6 +315,7 @@ Changelog
 =========
 
 (unreleased)
+  - support array types w/o items specified in schema in a comma separated text field
   - add validation_errors_formatter
   - replace setValidationReport w/ setValidationErrors (former will be deprecated soon)
   - support autocomplete via datalist

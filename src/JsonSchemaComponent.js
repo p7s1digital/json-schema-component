@@ -45,7 +45,7 @@ function JsonSchemaComponent(options) {
     append_fn.call(rendered, options.form);
   }
 
-  split_tags_by = RegExp(options.split_tags_by || /,\ */);
+  split_tags_by = RegExp(options.split_tags_by || /\ *,\ */);
 
   var form = $(options.existing_form || options.form);
 

@@ -633,7 +633,6 @@ describe("JsonSchemaComponent", function() {
           validation_errors_formatter: function(errors) {
             /* Translate error messages to german */
             return $.map(errors, function(error) {
-              console.log(error);
               if (error.message === "String does not match pattern") {
                 error.message = "Zeichenkette passt nicht mit Muster zusammen"
               }

@@ -48,8 +48,12 @@
   "name" : "Sea voyage form",
   "properties" : {
     "chapter" : {
+      "type" : "string",
+      "description" : "Current chapter (autocomplete)"
+    },
+    "favorite_chapter" : {
       "type" : "integer",
-      "description" : "Current chapter (autocomplete!)",
+      "description" : "Favorite chapter number",
       "minimum": 1,
       "maximum": 135
     },
@@ -216,7 +220,7 @@ $.ajax({
   success: function(data) {
     var html = '';
     $.each(data, function(value, description) {
-      html += '<option value="' + value + '">' + description + '</option>';
+      html += '<option value="' + description + '">' + description + '</option>';
     });
     mycomponent.setDatalist('chapter', html);
   }

@@ -13,7 +13,7 @@ The combination of these features allows for the rapid development of instant
 user interfaces for JSON APIs, e.g. in CouchDB powered back office GUIs.
 
 You can view a demo at
-https://peritus.s3.amazonaws.com/json_schema_component/demo.html
+http://peritus.s3.amazonaws.com/json_schema_component/demo.html
 
 Usage
 =====

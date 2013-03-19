@@ -331,10 +331,8 @@ v0.2 - 2012-01-31
 v0.1 - 2012-01-03
  - initial, non-public release
 
-Legal
-=====
-
-**Copyright & License**
+Copyright & License
+===================
 
 ::
 
@@ -363,4 +361,7 @@ Legal
 
 **Authors**
   Filip Noetzel, `Lovely Systems <http://www.lovelysystems.com/>`_, Dornbirn
+
+.. image:: http://www.prosiebensat1digital.de/imperia/md/images/soim/Unternehmen/logo_psd_173x133.jpg
+ :target: http://www.prosiebensat1digital.de/
 

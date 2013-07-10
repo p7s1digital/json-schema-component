@@ -272,6 +272,5 @@ JsonSchemaComponent.prototype.TEMPLATE = [
 
 return JsonSchemaComponent;
 
-
 }));
 

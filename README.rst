@@ -1,5 +1,5 @@
 ===================
-JsonSchemaComponent
+JSON Schema Component
 ===================
 
 This JavaScript library will
@@ -362,6 +362,6 @@ Copyright & License
 **Authors**
   Filip Noetzel, `Lovely Systems <http://www.lovelysystems.com/>`_, Dornbirn
 
-.. image:: http://www.prosiebensat1digital.de/imperia/md/images/soim/Unternehmen/logo_psd_173x133.jpg
+.. image:: https://raw.github.com/p7s1digital/json-schema-component/master/images/prosiebensat1digital-logo.png
  :target: http://www.prosiebensat1digital.de/
 

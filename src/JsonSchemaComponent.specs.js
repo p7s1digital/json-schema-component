@@ -95,6 +95,25 @@ describe("JsonSchemaComponent", function() {
       expect($("#testtextfield").val()).toEqual("value_a");
     });
 
+    it("should should pre-fill object in a simple form if textfield is empty", function() {
+      fixture.html('<textarea id=testtextarea></textarea>'+
+                   '<form id=testform><input type=text id="testtextfield" name=whale /></form>');
+
+      new JsonSchemaComponent({ 
+        schema:{
+          properties: {
+            whale: {
+              type: "string"
+            }
+          }
+        }, textarea:"#testtextarea", form:"#testform"});
+
+      $('#testtextfield').val("moby");
+      $('#testtextfield').trigger("change");
+      
+      expect(json_val($("#testtextarea")).whale).toEqual('moby');
+    });
+
     it("should should fill boolean values in a provided form with two checkboxes", function() {
       fixture.html('<textarea id=testtextarea>{"field_a": true, "field_b": false}</textarea>'+
                    '<form id=testform>'+
@@ -428,6 +447,31 @@ describe("JsonSchemaComponent", function() {
         '<textarea id=testtextarea>{}</textarea>'+
         '<form id=testform></form>'
       );
+    });
+
+    it("should should append the fields below a given Element", function() {
+
+      fixture.html(
+        '<textarea id=testtextarea>{"whale": "Moby Dick"}</textarea>'+
+        '<form id=testform>' +
+        '<div id=hook></div>' +
+        '</form>'
+      );
+
+      new JsonSchemaComponent({
+        textarea:"#testtextarea",
+        form:"#testform",
+        schema: {
+          properties: {
+            whale: {
+              type: "string"
+            }
+          }
+        },
+        appendEl: "#hook"
+      });
+
+      expect($("#hook").html()).toContain('<label>');
     });
 
     it("should should render a simple one-textfield-form", function() {

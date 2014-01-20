@@ -57,7 +57,9 @@ function JsonSchemaComponent(options) {
   var validation_errors_formatter = options.validation_errors_formatter || function(errors) {
     return errors;
   }
-  var json = $.parseJSON($(textarea).val());
+
+  var textareaValue = $(textarea).val() === '' ? '{}' : $(textarea).val();
+  var json = $.parseJSON(textareaValue);
 
   var validator;
   if (window.JSV != null) {
@@ -71,7 +73,8 @@ function JsonSchemaComponent(options) {
   if (options.existing_form == null) {
     var rendered = _this.render();
     var append_fn = rendered.appendPolyfillTo /* webshims support */ || rendered.appendTo;
-    append_fn.call(rendered, options.form);
+    var appendEl = options.appendEl ? options.appendEl : options.form;
+    append_fn.call(rendered, appendEl);
   }
 
   split_tags_by = RegExp(options.split_tags_by || /\ *,\ */);
@@ -274,4 +277,3 @@ return JsonSchemaComponent;
 
 
 }));
-

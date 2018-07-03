@@ -290,7 +290,7 @@ Tests
 +++++
 
 Testing this library is done using `Jasmine BDD
-<http://pivotal.github.com/jasmine/>`_. You can find the test suite in
+<https://jasmine.github.io/>`_. You can find the test suite in
 ``src/JsonSchemaComponent.specs.js`` and execute the tests in your browser at
 http://p7s1digital.github.com/json-schema-component/tests.html.
 
